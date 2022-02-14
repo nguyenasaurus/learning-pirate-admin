@@ -1,0 +1,44 @@
+<h4>Sign In</h4>
+<p>Please provide you authentication details to access the administrative portal</p>
+
+<div class="form">
+  <div class="body">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+      <div class="input-field">
+        <i class="ri-mail-line"></i>
+        <input type="email" placeholder="Email Address" #email formControlName="email" required
+          (ngModelChange)="checkEmail()" />
+      </div>
+      <app-input-checker [checker]="noEmail" [message]="noEmailMessage"></app-input-checker>
+
+      <div class="input-field-password">
+        <i class="ri-key-line"></i>
+        <input [type]="!showPassword ? 'password' : 'text'" placeholder="Password" #password formControlName="password"
+          required (ngModelChange)="checkPassword()" />
+        <span [ngClass]="{'ri-lock-unlock-line': showPassword, 'ri-lock-line' : !showPassword }"
+          (click)="showPassword = !showPassword"></span>
+      </div>
+      <app-input-checker [checker]="noPassword" [message]="noPasswordMessage"></app-input-checker>
+
+      <div class="forgot-password" routerLink="/forgot-password">
+        Forgot your password?
+        <span>Rest Here</span>
+      </div>
+
+    </form>
+  </div>
+  <div class="footer">
+    <div class="space-between">
+      <button class="btn-text" routerLink="/sign-up">
+        Create Account
+      </button>
+      <button class="btn" (click)="onSubmit()" [disabled]="isSubmitting" [ngClass]="{'disabled': isSubmitting}">
+        <span *ngIf="isSubmitting">
+          <i class="ri-loader-2-line"></i> Authenticating
+        </span>
+        <span *ngIf="!isSubmitting">Sign In</span>
+      </button>
+    </div>
+  </div>
+</div>

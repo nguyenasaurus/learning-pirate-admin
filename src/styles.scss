@@ -1,1 +1,619 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+/*== ROOT VARIABLES ==*/
+:root {
+  --font-family: "Quicksand", sans-serif;
+  --primary: #0095e7;
+  --primary-light: #0095e710;
+  --primary-2: #4169e1;
+  --secondary-2: #263043;
+  --secondary: #000000;
+  --danger: rgb(223, 9, 9);
+  --warning: #ffbb55;
+  --success: teal;
+  --white: #ffffff;
+  --text: #2e2d2d;
+  --background: #ececee;
+  --shadow: #eaeaf3;
+  --placeholder: #636363;
+
+  --box-shadow: 0 0 toRem(10) toRem(-2) var(--shadow);
+  --border-radius: toRem(10);
+  --switch-bgLightModeColor: #87cefa;
+  --switch-sunColor: gold;
+  --switch-moonColor: #f4f4f4;
+  --switch-bgDarkModeColor: #1f1f27;
+
+  --sidebar-width: 250px;
+}
+
+/* ========== DARK THEME ====== */
+.dark-version {
+  --secondary: #f0efef;
+  --secondary-2: #ffffff;
+  --background: #181a1e;
+  --white: #202528;
+  --text: #edeffd;
+  --shadow: #272727;
+  --box-shadow: 0 1rem 1.5rem var(--shadow);
+  --placeholder: #d8d5d5;
+}
+
+@function toRem($value) {
+  $remValue: ($value / 16) + rem;
+  @return $remValue;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  appearance: none;
+  border: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 1rem;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--font-family);
+  font-size: 100%;
+  font-size: 1rem;
+  line-height: 1.5;
+  background: var(--background);
+  user-select: none;
+  overflow-x: hidden;
+  color: var(--text-color);
+}
+
+.container {
+  display: grid;
+  width: 100%;
+  margin: 0 auto;
+  gap: 1.8rem;
+  grid-template-columns: 17rem auto 23rem;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-2);
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.8rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-size: 0.87rem;
+}
+
+h4 {
+  font-size: 0.8rem;
+}
+
+h1 {
+  font-size: 0.77rem;
+}
+
+small {
+  font-size: 0.75rem;
+}
+
+.profile-photo {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.text-muted {
+  color: var(--info-dark);
+}
+
+p {
+  color: var(--text-color);
+}
+
+b {
+  color: var(--dark);
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.secondary {
+  color: var(--secondary);
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.success {
+  color: var(--success);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.white {
+  color: var(--white);
+}
+
+.primary-bg {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.secondary-bg {
+  background: var(--secondary);
+  color: var(--white);
+}
+
+.danger-bg {
+  background: var(--danger);
+  color: var(--white);
+}
+
+.success-bg {
+  background: var(--success);
+  color: var(--white);
+}
+
+.warning-bg {
+  background: var(--warning);
+  color: var(--white);
+}
+
+.white-bg {
+  background: var(--white);
+  color: var(--white);
+}
+
+/* ======= Authentication ======= */
+.split-screen {
+  display: grid;
+  grid-template-columns: 50% auto;
+}
+
+.split-screen .left {
+  padding: toRem(50) toRem(100) toRem(50) toRem(100);
+  height: 100vh;
+  background-color: var(--secondary-2);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url(assets/images/tldp.png) center/cover no-repeat;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.split-screen .left .logo img {
+  height: toRem(100);
+  width: auto;
+  margin-bottom: toRem(50);
+}
+
+.split-screen .left .content h2 {
+  font-size: toRem(40);
+  line-height: toRem(60);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.split-screen .left .content .img {
+  margin: toRem(30) toRem(0);
+  width: 60%;
+}
+
+.split-screen .left .content h4 {
+  font-size: toRem(20);
+  line-height: toRem(30);
+  color: var(--white);
+  font-weight: 400;
+}
+
+.split-screen .left .footer {
+  position: absolute;
+  bottom: toRem(50);
+  width: 100%;
+}
+
+.split-screen .left .footer a {
+  color: var(--white);
+}
+
+.split-screen .right {
+  height: 100vh;
+  padding: toRem(100) toRem(100) toRem(50) toRem(100);
+}
+
+.split-screen .right .content {
+  padding: toRem(30);
+  border-radius: toRem(10);
+  background: var(--white);
+}
+
+.split-screen .right .content h4 {
+  font-size: toRem(25);
+  line-height: toRem(38);
+  margin-bottom: toRem(10);
+  font-weight: bold;
+}
+
+.split-screen .right .content p {
+  margin-bottom: toRem(30);
+}
+
+.form {
+  margin-top: toRem(20);
+}
+
+.form .body {
+  margin-top: toRem(20);
+}
+
+.form .footer {
+  margin-top: toRem(30);
+}
+
+/* ======== Gen ========= */
+.space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/* ======== form ========= */
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: all 0.2s 0.7s;
+  overflow: hidden;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.input-field {
+  width: 100%;
+  background-color: var(--background);
+  margin: toRem(10) 0;
+  height: toRem(55);
+  display: grid;
+  grid-template-columns: 10% 90%;
+  padding: 0 toRem(4);
+  position: relative;
+  border-radius: toRem(10);
+}
+
+.input-field i {
+  text-align: center;
+  line-height: toRem(55);
+  color: var(--form-control-placeholder-color);
+  transition: 0.5s;
+  font-size: toRem(16);
+}
+
+.input-field input {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-size: toRem(16);
+  line-height: toRem(24);
+}
+
+.input-field input::placeholder {
+  color: var(--form-control-placeholder-color);
+  font-weight: 400;
+}
+
+.input-field-password {
+  width: 100%;
+  background-color: var(--background);
+  margin: toRem(10) 0;
+  height: toRem(55);
+  display: grid;
+  grid-template-columns: 10% 80% 10%;
+  padding: 0 toRem(4);
+  position: relative;
+  border-radius: toRem(10);
+}
+
+.input-field-password i {
+  text-align: center;
+  line-height: toRem(55);
+  color: var(--form-control-placeholder-color);
+  transition: 0.5s;
+  font-size: toRem(16);
+}
+
+.input-field-password span {
+  text-align: center;
+  line-height: toRem(55);
+  color: var(--form-control-placeholder-color);
+  transition: 0.5s;
+  font-size: toRem(16);
+}
+
+.input-field-password input {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-size: toRem(16);
+}
+
+.input-field-password input::placeholder {
+  color: var(--form-control-placeholder-color);
+  font-weight: 500;
+}
+
+.btn.disabled {
+  background: var(--info-dark);
+  color: var(--text-color);
+}
+
+.btn {
+  font-size: toRem(16);
+  color: var(--white);
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: toRem(50);
+  background: var(--primary);
+  padding: toRem(10) toRem(30);
+  border: none;
+  height: toRem(40);
+  cursor: pointer;
+  outline: none;
+  transition: 0.5s;
+}
+
+.btn span {
+  color: var(--white) !important;
+}
+
+.btn-text {
+  font-size: toRem(16);
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: toRem(50);
+  padding: toRem(10) toRem(30);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: 0.5s;
+}
+
+.btn-text span {
+  color: var(--text-color) !important;
+}
+
+span {
+  color: var(--primary);
+}
+
+.forgot-password {
+  cursor: pointer;
+  position: relative;
+  float: right;
+}
+
+.theme-toggler {
+  background: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 1.6rem;
+  width: 3.3rem;
+  cursor: pointer;
+  border-radius: toRem(50);
+}
+
+.theme-toggler i {
+  font-size: 0.95rem;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theme-toggler i.active {
+  background: var(--primary);
+  color: var(--white);
+  border-radius: toRem(50);
+}
+
+/* ========== CUSTOM ========== */
+.sidenav-header {
+  height: toRem(110);
+}
+.navbar .navbar-brand {
+  color: var(--white);
+  font-size: toRem(24);
+  font-weight: 600;
+}
+.sidenav .navbar-brand {
+  padding: toRem(20) toRem(40);
+}
+.navbar-vertical .navbar-brand > img,
+.navbar-vertical .navbar-brand-img {
+  max-width: toRem(110);
+  max-height: toRem(110);
+}
+
+.navbar-vertical.navbar-expand-xs .navbar-collapse {
+  display: block;
+  overflow: auto;
+  height: calc(100vh - 180px);
+}
+
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link .nav-link-text,
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link .sidenav-mini-icon,
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link .sidenav-normal,
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link i {
+  pointer-events: none;
+  font-size: toRem(18);
+}
+
+.bg-gradient-primary {
+  background-image: linear-gradient(
+    195deg,
+    var(--primary) 0%,
+    var(--primary-2) 100%
+  );
+}
+
+/* ========= END CUSTOM ========== */
+
+/* ===== MEDIA QUERIES PHONES & SMALLER TABLETS ====== */
+@media screen and (max-width: 599px) {
+  .split-screen {
+    display: block;
+  }
+
+  .split-screen .left {
+    display: none;
+  }
+
+  .split-screen .top {
+    padding: toRem(40) toRem(20) toRem(20) toRem(20);
+    height: toRem(105);
+    width: 100%;
+    background-color: var(--secondary-2);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url(assets/images/tldp.png) center/cover no-repeat;
+    position: relative;
+    display: grid;
+    grid-template-columns: 60% auto;
+  }
+
+  .split-screen .top .logo img {
+    height: toRem(60);
+    width: auto;
+    margin-bottom: toRem(20);
+  }
+
+  .split-screen .top h2 {
+    font-size: toRem(20);
+    line-height: toRem(30);
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .split-screen .top h4 {
+    font-size: toRem(13);
+    line-height: toRem(19);
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .split-screen .right {
+    height: 100vh;
+    padding: toRem(20) toRem(20) toRem(30) toRem(20);
+  }
+}
+
+/* ===== MEDIA QUERIES TABLETS & SMALL SCREEN DESKTOP/LAPTOPS ====== */
+@media screen and (min-width: 600px) and (max-width: 849px) {
+  .split-screen {
+    display: block;
+  }
+
+  .split-screen .left {
+    display: none;
+  }
+
+  .split-screen .top {
+    padding: toRem(50) toRem(40) toRem(20) toRem(40);
+    height: toRem(150);
+    width: 100%;
+    background-color: var(--secondary-2);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url(assets/images/tldp.png) center/cover no-repeat;
+    position: relative;
+    display: grid;
+    grid-template-columns: 60% auto;
+  }
+
+  .split-screen .top .logo img {
+    height: toRem(100);
+    width: auto;
+    margin-bottom: toRem(20);
+  }
+
+  .split-screen .top h2 {
+    font-size: toRem(30);
+    line-height: toRem(45);
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .split-screen .top h4 {
+    font-size: toRem(20);
+    line-height: toRem(30);
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .split-screen .right {
+    height: 100vh;
+    padding: toRem(40) toRem(40) toRem(50) toRem(40);
+  }
+}
+
+@media screen and (min-width: 850px) and (max-width: 1099px) {
+  .split-screen .top {
+    display: none;
+  }
+
+  .split-screen .right {
+    height: 100vh;
+    padding: toRem(40) toRem(40) toRem(50) toRem(40);
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .split-screen .top {
+    display: none;
+  }
+}

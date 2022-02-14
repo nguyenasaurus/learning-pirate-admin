@@ -1,0 +1,60 @@
+<h4>Create New Account</h4>
+<p>Fill the following form with valid data to create complete your account creation process.</p>
+
+<div class="form">
+  <div class="body">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div class="input-field">
+        <i class="ri-user-line"></i>
+        <input type="text" placeholder="Display Name" #displayName formControlName="displayName" required
+          (ngModelChange)="checkName()" />
+      </div>
+      <app-input-checker [checker]="noName" [message]="noNameMessage"></app-input-checker>
+
+      <div class="input-field">
+        <i class="ri-phone-line"></i>
+        <input type="text" placeholder="Phone Number" #phoneNumber formControlName="phoneNumber" required
+          (ngModelChange)="checkPhone()" />
+      </div>
+      <app-input-checker [checker]="noPhone" [message]="noPhoneMessage"></app-input-checker>
+
+      <div class="input-field">
+        <i class="ri-mail-line"></i>
+        <input type="email" placeholder="Email Address" #email formControlName="email" required
+          (ngModelChange)="checkEmail()" />
+      </div>
+      <app-input-checker [checker]="noEmail" [message]="noEmailMessage"></app-input-checker>
+
+      <div class="input-field-password">
+        <i class="ri-key-line"></i>
+        <input [type]="!showPassword ? 'password' : 'text'" placeholder="Password" #password formControlName="password"
+          required (ngModelChange)="checkPassword()" />
+        <span [ngClass]="{'ri-lock-unlock-line': showPassword, 'ri-lock-line' : !showPassword }"
+          (click)="showPassword = !showPassword"></span>
+      </div>
+      <app-input-checker [checker]="noPassword" [message]="noPasswordMessage"></app-input-checker>
+
+      <div class="input-field-password">
+        <i class="ri-key-line"></i>
+        <input [type]="!showPasswordConfirmation ? 'password' : 'text'" placeholder="Password" #passwordConfirmation
+          formControlName="passwordConfirmation" required (ngModelChange)="checkPasswordConfirmation()" />
+        <span [ngClass]="{'ri-lock-unlock-line': showPasswordConfirmation, 'ri-lock-line' : !showPasswordConfirmation }"
+          (click)="showPasswordConfirmation = !showPasswordConfirmation"></span>
+      </div>
+      <app-input-checker [checker]="noPasswordConfirmation" [message]="noPasswordConfirmationMessage">
+      </app-input-checker>
+      <app-input-checker [checker]="notMatched" [message]="notMatchedMessage"></app-input-checker>
+
+    </form>
+  </div>
+  <div class="footer">
+    <div class="space-between">
+      <button class="btn-text" routerLink="/sign-in">
+        Sign In
+      </button>
+      <button class="btn" (click)="onSubmit()" [disabled]="isSubmitting" [ngClass]="{'disabled': isSubmitting}">
+        Create Account
+      </button>
+    </div>
+  </div>
+</div>
