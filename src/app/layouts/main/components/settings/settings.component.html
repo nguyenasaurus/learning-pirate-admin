@@ -1,0 +1,78 @@
+<!-- Navbar -->
+<app-header [pages]="pages" [page]="page"></app-header>
+<!-- End Navbar -->
+<div class="container-fluid py-4" *ngIf="users">
+
+  <div class="card card-body mt-2">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Page Administrators</h6>
+              </div>
+              <div class="col-md-6 text-end">
+                <div class="clickable" (click)="canEdit = !canEdit">
+                  <i class="ri-group-line text-secondary text-lg"></i>
+                  <strong class="mx-3">{{ users.length | number }}</strong> In Total
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100" *ngIf="canEdit">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0">Edit User Account Level</h6>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="form">
+              <div class="body">
+                <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+                  <div class="input-field">
+                    <i class="ri-user-line"></i>
+                    <input type="text" placeholder="Display name" #displayName formControlName="displayName" required
+                      (ngModelChange)="checkName()" />
+                  </div>
+
+                  <div class="input-field">
+                    <i class="ri-phone-line"></i>
+                    <input type="text" placeholder="Phone number" #phoneNumber formControlName="phoneNumber" required
+                      (ngModelChange)="checkPhoneNumber()" />
+                  </div>
+
+                </form>
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <p>&nbsp;</p>
+                  <button class="app-btn" (click)="onSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+
+</div>

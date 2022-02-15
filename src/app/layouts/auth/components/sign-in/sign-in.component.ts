@@ -80,18 +80,20 @@ export class SignInComponent implements OnInit {
 
       this.authService
         .emailSignIn(email, password)
-        .pipe(
-          this.hotToast.observe({
-            success: 'Authentication successful',
-            loading: 'Authenticating...',
-            error: 'Authentication failed',
-          })
-        )
-        .subscribe(() => {
+        .then(() => {
+          this.toast.success(
+            'You have successfully signed into the Admin Portal.',
+            'Authentication Successful'
+          );
           this.isSubmitting = false;
+          this.form.enable;
           this.router.navigate(['/dashboard']);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isSubmitting = false;
+          this.form.enable;
         });
-      this.isSubmitting = false;
     }
   }
 

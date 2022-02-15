@@ -12,6 +12,8 @@ import {
   redirectUnauthorizedTo,
   redirectLoggedInTo,
 } from '@angular/fire/auth-guard';
+import { SettingsComponent } from './layouts/main/components/settings/settings.component';
+import { ProfileComponent } from './layouts/main/components/profile/profile.component';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['sign-in']);
 
@@ -32,6 +34,16 @@ const routes: Routes = [
         path: 'dashboard',
         ...canActivate(redirectToLogin),
         component: DashboardComponent,
+      },
+      {
+        path: 'profile',
+        ...canActivate(redirectToLogin),
+        component: ProfileComponent,
+      },
+      {
+        path: 'settings',
+        ...canActivate(redirectToLogin),
+        component: SettingsComponent,
       },
     ],
   },

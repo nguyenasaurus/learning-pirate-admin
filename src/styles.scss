@@ -16,6 +16,7 @@
   --white: #ffffff;
   --text: #2e2d2d;
   --background: #ececee;
+  --header-bg: #ffffff;
   --shadow: #eaeaf3;
   --placeholder: #636363;
 
@@ -34,6 +35,7 @@
   --secondary: #f0efef;
   --secondary-2: #ffffff;
   --background: #181a1e;
+  --header-bg: #1f283e;
   --white: #202528;
   --text: #edeffd;
   --shadow: #272727;
@@ -321,12 +323,13 @@ form {
   padding: 0 toRem(4);
   position: relative;
   border-radius: toRem(10);
+  color: var(--text);
 }
 
 .input-field i {
   text-align: center;
   line-height: toRem(55);
-  color: var(--form-control-placeholder-color);
+  color: var(--placeholder);
   transition: 0.5s;
   font-size: toRem(16);
 }
@@ -338,10 +341,11 @@ form {
   line-height: 1;
   font-size: toRem(16);
   line-height: toRem(24);
+  color: var(--text);
 }
 
 .input-field input::placeholder {
-  color: var(--form-control-placeholder-color);
+  color: var(--placeholder);
   font-weight: 400;
 }
 
@@ -355,12 +359,13 @@ form {
   padding: 0 toRem(4);
   position: relative;
   border-radius: toRem(10);
+  color: var(--text);
 }
 
 .input-field-password i {
   text-align: center;
   line-height: toRem(55);
-  color: var(--form-control-placeholder-color);
+  color: var(--placeholder);
   transition: 0.5s;
   font-size: toRem(16);
 }
@@ -368,7 +373,7 @@ form {
 .input-field-password span {
   text-align: center;
   line-height: toRem(55);
-  color: var(--form-control-placeholder-color);
+  color: var(--placeholder);
   transition: 0.5s;
   font-size: toRem(16);
 }
@@ -379,21 +384,22 @@ form {
   border: none;
   line-height: 1;
   font-size: toRem(16);
+  color: var(--text);
 }
 
 .input-field-password input::placeholder {
-  color: var(--form-control-placeholder-color);
+  color: var(--placeholder);
   font-weight: 500;
 }
 
-.btn.disabled {
-  background: var(--info-dark);
+.app-btn.disabled {
+  background: var(--background);
   color: var(--text-color);
 }
 
-.btn {
+.app-btn {
   font-size: toRem(16);
-  color: var(--white);
+  color: white;
   text-align: center;
   text-transform: uppercase;
   border-radius: toRem(50);
@@ -404,15 +410,17 @@ form {
   cursor: pointer;
   outline: none;
   transition: 0.5s;
+  font-weight: 600;
 }
 
-.btn span {
-  color: var(--white) !important;
+.app-btn span {
+  color: white !important;
 }
 
-.btn-text {
+.app-btn-text {
   font-size: toRem(16);
   text-align: center;
+  color: var(--text);
   text-transform: uppercase;
   border-radius: toRem(50);
   padding: toRem(10) toRem(30);
@@ -421,9 +429,10 @@ form {
   cursor: pointer;
   outline: none;
   transition: 0.5s;
+  font-weight: 600;
 }
 
-.btn-text span {
+.app-btn-text span {
   color: var(--text-color) !important;
 }
 
@@ -438,7 +447,7 @@ span {
 }
 
 .theme-toggler {
-  background: var(--white);
+  background: var(--background);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -464,6 +473,10 @@ span {
 }
 
 /* ========== CUSTOM ========== */
+.mc {
+  margin-top: toRem(55);
+  padding-top: toRem(55);
+}
 .sidenav-header {
   height: toRem(110);
 }
@@ -501,6 +514,81 @@ span {
     var(--primary) 0%,
     var(--primary-2) 100%
   );
+  box-shadow: 0 3px 3px 0 var(--primary-light),
+    0 3px 1px -2px var(--primary-light), 0 1px 5px 0 var(--primary-light);
+}
+.shadow-primary {
+  box-shadow: 0 3px 3px 0 var(--primary-light),
+    0 3px 1px -2px var(--primary-light), 0 1px 5px 0 var(--primary-light) !important;
+}
+
+.user-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-profile .avatar {
+  width: toRem(30);
+  height: toRem(30);
+  border: toRem(2) solid var(--primary);
+  border-radius: 50px;
+  margin-right: toRem(10);
+}
+.user-profile .avatar img {
+  width: 90%;
+}
+.user-profile p {
+  font-size: toRem(15);
+  font-weight: 600;
+  margin-bottom: toRem(-5);
+}
+.user-profile small {
+  font-size: toRem(12);
+  font-weight: 400;
+}
+#navbarBlur {
+  background: var(--header-bg);
+  position: fixed;
+  z-index: 99;
+  top: 0px;
+  width: 82%;
+}
+
+.dropbtn {
+  background-color: transparent;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  top: toRem(40);
+  display: none;
+  position: absolute;
+  background-color: var(--white);
+  min-width: toRem(200);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: var(--text);
+  padding: toRem(12) toRem(18);
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  color: var(--primary);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 /* ========= END CUSTOM ========== */
@@ -615,5 +703,14 @@ span {
 @media screen and (min-width: 1100px) {
   .split-screen .top {
     display: none;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #navbarBlur {
+    background: var(--header-bg);
+    position: fixed;
+    z-index: 99;
+    top: 0px;
+    width: 100%;
   }
 }

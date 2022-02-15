@@ -49,11 +49,14 @@
   </div>
   <div class="footer">
     <div class="space-between">
-      <button class="btn-text" routerLink="/sign-in">
+      <button class="app-btn-text" routerLink="/sign-in">
         Sign In
       </button>
-      <button class="btn" (click)="onSubmit()" [disabled]="isSubmitting" [ngClass]="{'disabled': isSubmitting}">
-        Create Account
+      <button class="app-btn" (click)="onSubmit()" [disabled]="isSubmitting" [ngClass]="{'disabled': isSubmitting}">
+        <span *ngIf="isSubmitting">
+          <i class="ri-loader-2-fill"></i> Processing
+        </span>
+        <span *ngIf="!isSubmitting">Create Account</span>
       </button>
     </div>
   </div>

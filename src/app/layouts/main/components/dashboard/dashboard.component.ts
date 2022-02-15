@@ -21,6 +21,7 @@ import {
   setDoc,
 } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -58,9 +59,12 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
-  user$ = this.authService.currentUser$;
+  pages = [{ url: '/dashboard', title: 'User' }];
+  page = 'Dashboard';
 
-  constructor(private authService: AuthService) {}
+  constructor(private titleService: Title) {
+    this.titleService.setTitle(this.page);
+  }
 
   ngOnInit(): void {}
 }

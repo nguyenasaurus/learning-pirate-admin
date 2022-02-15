@@ -55,9 +55,7 @@ export class SignUpComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toast: ToastrService,
     private authService: AuthService,
-    private userService: UserService,
-    private router: Router,
-    private hotToast: HotToastService
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -148,38 +146,30 @@ export class SignUpComponent implements OnInit {
       let displayName = this.form.value.displayName;
       let phoneNumber = this.form.value.phoneNumber;
 
-      this.authService
-        .userSignUp(email, password, displayName)
-        .pipe(
-          this.hotToast.observe({
-            success: 'Account created, setting up',
-            loading: 'Processing...',
-            error: ({ message }) => `${message}`,
-          })
-        )
-        .subscribe(() => {
-          // Setup user
-          let payload = {
-            email: email,
-            displayName: displayName,
-            phoneNumber: phoneNumber,
-            accountType: this.accountType,
-            imageUrl: this.imageUrl,
-          };
+      let payload = {
+        email: email,
+        password: password,
+        displayName: displayName,
+        phoneNumber: phoneNumber,
+        accountType: this.accountType,
+        imageUrl: this.imageUrl,
+      };
 
-          this.userService
-            .create(payload)
-            .pipe(
-              this.hotToast.observe({
-                success: 'Account setup successful',
-                loading: 'Processing...',
-                error: ({ message }) => `${message}`,
-              })
-            )
-            .subscribe(() => {
-              this.isSubmitting = false;
-              this.router.navigate(['/']);
-            });
+      this.authService
+        .userSignUp(payload)
+        .then(() => {
+          this.toast.success(
+            'You have successfully signed into the Admin Portal.',
+            'Authentication Successful'
+          );
+          this.isSubmitting = false;
+          this.form.enable;
+          this.router.navigate(['/dashboard']);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isSubmitting = false;
+          this.form.enable;
         });
     }
   }

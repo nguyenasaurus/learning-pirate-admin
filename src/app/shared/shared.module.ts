@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TopComponent } from './components/top/top.component';
 import { RightBarComponent } from './components/right-bar/right-bar.component';
 import { InputCheckerComponent } from './components/input-checker/input-checker.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { InputCheckerComponent } from './components/input-checker/input-checker.
     TopComponent,
     RightBarComponent,
     InputCheckerComponent,
+    BreadcrumbComponent,
   ],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -26,6 +28,7 @@ import { InputCheckerComponent } from './components/input-checker/input-checker.
     TopComponent,
     RightBarComponent,
     InputCheckerComponent,
+    BreadcrumbComponent,
   ],
 })
 export class SharedModule {}

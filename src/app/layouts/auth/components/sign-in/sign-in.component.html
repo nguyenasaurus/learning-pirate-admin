@@ -30,10 +30,10 @@
   </div>
   <div class="footer">
     <div class="space-between">
-      <button class="btn-text" routerLink="/sign-up">
+      <button class="app-btn-text" routerLink="/sign-up">
         Create Account
       </button>
-      <button class="btn" (click)="onSubmit()" [disabled]="isSubmitting" [ngClass]="{'disabled': isSubmitting}">
+      <button class="app-btn" (click)="onSubmit()" [disabled]="isSubmitting" [ngClass]="{'disabled': isSubmitting}">
         <span *ngIf="isSubmitting">
           <i class="ri-loader-2-line"></i> Authenticating
         </span>
