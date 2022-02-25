@@ -9,6 +9,7 @@ import { TopComponent } from './components/top/top.component';
 import { RightBarComponent } from './components/right-bar/right-bar.component';
 import { InputCheckerComponent } from './components/input-checker/input-checker.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { WebinarComponent } from './components/webinar/webinar.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     RightBarComponent,
     InputCheckerComponent,
     BreadcrumbComponent,
+    WebinarComponent,
   ],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   exports: [

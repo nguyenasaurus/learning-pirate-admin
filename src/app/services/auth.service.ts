@@ -11,7 +11,7 @@ import {
 
 import { from } from 'rxjs';
 import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore';
-import { sendPasswordResetEmail } from 'firebase/auth';
+import { sendPasswordResetEmail, signInWithCustomToken } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root',

@@ -37,7 +37,7 @@ export class UserService {
   update(id: string, data: any) {
     const userDocRef = doc(this.firestore, `users/${id}`);
     return setDoc(userDocRef, data);
-    return updateDoc(userDocRef, data);
+    // return updateDoc(userDocRef, data);
   }
 
   updateAccountType(id: string, data: any) {

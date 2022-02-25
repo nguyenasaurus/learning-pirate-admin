@@ -14,6 +14,17 @@ import {
 } from '@angular/fire/auth-guard';
 import { SettingsComponent } from './layouts/main/components/settings/settings.component';
 import { ProfileComponent } from './layouts/main/components/profile/profile.component';
+import { HomeComponent } from './layouts/main/components/home/home.component';
+import { AboutComponent } from './layouts/main/components/about/about.component';
+import { LearningDesignComponent } from './layouts/main/components/learning-design/learning-design.component';
+import { SpeakingComponent } from './layouts/main/components/speaking/speaking.component';
+import { MembersComponent } from './layouts/main/components/members/members.component';
+import { PodcastsComponent } from './layouts/main/components/podcasts/podcasts.component';
+import { ConferencesComponent } from './layouts/main/components/conferences/conferences.component';
+import { ArticlesComponent } from './layouts/main/components/articles/articles.component';
+import { TestimonialComponent } from './layouts/main/components/testimonial/testimonial.component';
+import { SignedInComponent } from './layouts/auth/components/signed-in/signed-in.component';
+import { WebinarsComponent } from './layouts/main/components/webinars/webinars.component';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['sign-in']);
 
@@ -28,12 +39,12 @@ const routes: Routes = [
       {
         path: '',
         ...canActivate(redirectToLogin),
-        component: DashboardComponent,
+        component: HomeComponent,
       },
       {
-        path: 'dashboard',
+        path: 'home',
         ...canActivate(redirectToLogin),
-        component: DashboardComponent,
+        component: HomeComponent,
       },
       {
         path: 'profile',
@@ -44,6 +55,51 @@ const routes: Routes = [
         path: 'settings',
         ...canActivate(redirectToLogin),
         component: SettingsComponent,
+      },
+      {
+        path: 'about',
+        ...canActivate(redirectToLogin),
+        component: AboutComponent,
+      },
+      {
+        path: 'learning-design',
+        ...canActivate(redirectToLogin),
+        component: LearningDesignComponent,
+      },
+      {
+        path: 'speaking',
+        ...canActivate(redirectToLogin),
+        component: SpeakingComponent,
+      },
+      {
+        path: 'members',
+        ...canActivate(redirectToLogin),
+        component: MembersComponent,
+      },
+      {
+        path: 'podcasts',
+        ...canActivate(redirectToLogin),
+        component: PodcastsComponent,
+      },
+      {
+        path: 'conference',
+        ...canActivate(redirectToLogin),
+        component: ConferencesComponent,
+      },
+      {
+        path: 'articles',
+        ...canActivate(redirectToLogin),
+        component: ArticlesComponent,
+      },
+      {
+        path: 'webinars',
+        ...canActivate(redirectToLogin),
+        component: WebinarsComponent,
+      },
+      {
+        path: 'testimonials',
+        ...canActivate(redirectToLogin),
+        component: TestimonialComponent,
       },
     ],
   },
@@ -68,8 +124,8 @@ const routes: Routes = [
         ...canActivate(redirectToHome),
       },
       {
-        path: 'verify-email',
-        component: VerifyEmailComponent,
+        path: 'signed-in',
+        component: SignedInComponent,
         ...canActivate(redirectToHome),
       },
     ],

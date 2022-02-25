@@ -1,0 +1,187 @@
+<!-- Navbar -->
+<app-header [pages]="pages" [page]="page"></app-header>
+<!-- End Navbar -->
+<div class="container-fluid py-4" *ngIf="articles">
+
+  <div class="card card-body mt-2">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Page Articles</h6>
+              </div>
+              <div class="col-md-6 text-end">
+                <div class="clickable">
+                  <i class="ri-voiceprint-line text-secondary text-lg"></i>
+                  <strong class="mx-3">{{ articles.length | number }}</strong> In Total
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <table class="table table-bordered table-striped table-hover" datatable [dtOptions]="dtOptions"
+              [dtTrigger]="dtTrigger">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Image</th>
+                  <th>Published On</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let article of articles">
+                  <td>
+                    <a [href]="article.url">{{ article.title }}</a>
+                  </td>
+                  <td>{{ article.description }}</td>
+                  <td><img [src]="article.imageUrl" alt=""></td>
+                  <td>{{ article.publishedOn }}</td>
+                  <td>
+                    <button class="btn btn-sm info-bg" (click)="editItem(article)" data-bs-toggle="modal"
+                      data-bs-target="#editModal" *ngIf="isAdmin">
+                      Edit
+                    </button>
+                    <button class="btn btn-sm danger-bg" (click)="deleteItem(article)" data-bs-toggle="modal"
+                      data-bs-target="#deleteModal" *ngIf="isAdmin">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0" *ngIf="!canEdit">Create Article</h6>
+            <h6 class="mb-0" *ngIf="canEdit">Edit Article</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="!canEdit">
+              <div class="body">
+
+                <form (ngSubmit)="onSubmit()" [formGroup]="form">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #publishedOn formControlName="publishedOn" required
+                      placeholder="Published On">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
+                      placeholder="Image URL/Link">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #url formControlName="url" required
+                      placeholder="Article URL/Link">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Say a few words about the article" #description
+                      formControlName="description" required></textarea>
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <p>&nbsp;</p>
+                  <button class="app-btn" (click)="onSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Article</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form" *ngIf="canEdit">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="form" *ngIf="chosenItem">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="chosenItem.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #publishedOn formControlName="publishedOn" required
+                      placeholder="Published On" [(ngModel)]="chosenItem.publishedOn">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
+                      placeholder="Image URL/Link" [(ngModel)]="chosenItem.imageUrl">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #url formControlName="url" required
+                      placeholder="Article URL/Link" [(ngModel)]="chosenItem.url">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Say a few words about the article" #description
+                      formControlName="description" required [(ngModel)]="chosenItem.description"></textarea>
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <p>&nbsp;</p>
+
+                  <button class="app-btn" (click)="onEditSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" *ngIf="selectedItem">
+            <div class="modal-header">
+              <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Delete Modal</h5>
+              <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete {{ selectedItem.title }} article?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">No</button>
+              <button type="button" class="btn bg-gradient-primary" (click)="onDelete(selectedItem.id)"
+                data-bs-dismiss="modal">Yes,
+                Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+
+</div>

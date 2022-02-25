@@ -164,7 +164,7 @@ export class SignUpComponent implements OnInit {
           );
           this.isSubmitting = false;
           this.form.enable;
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home']);
         })
         .catch((error) => {
           console.log(error);

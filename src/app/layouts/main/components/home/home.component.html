@@ -1,0 +1,545 @@
+<!-- Navbar -->
+<app-header [pages]="pages" [page]="page"></app-header>
+<!-- End Navbar -->
+<div class="container-fluid py-4">
+
+  <div class="card card-body mt-2" *ngIf="sectionOne">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Slider Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-header p-0 mt-n4 mx-3">
+                <a class="d-block shadow-xl border-radius-xl">
+                  <img [src]="sectionOne.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                </a>
+              </div>
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionOne.title"></h5>
+                </a>
+                <p class="mb-4 text-sm">{{ sectionOne.subtitle }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionOne.btnText }}</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionOne = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionOne">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="formSlider" *ngIf="sectionOne">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionOne.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
+                      placeholder="Subtitle" [(ngModel)]="sectionOne.subtitle">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnText formControlName="btnText" required
+                      placeholder="Button Text" [(ngModel)]="sectionOne.btnText">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
+                      placeholder="Button destination page" [(ngModel)]="sectionOne.btnLink">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
+                      placeholder="Slider Image URL/Link" [(ngModel)]="sectionOne.imageUrl">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Slider Description" #subtitle
+                      formControlName="subtitle" required [(ngModel)]="sectionOne.subtitle"></textarea>
+                  </div>
+                </form>
+
+
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionOne = false">Close</button>
+
+                  <button class="app-btn" (click)="onEditSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card card-body mt-4" *ngIf="sectionTwo">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Meet Lauren Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-header p-0 mt-n4 mx-3">
+                <a class="d-block shadow-xl border-radius-xl">
+                  <img [src]="sectionTwo.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                </a>
+              </div>
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionTwo.title"></h5>
+                </a>
+                <a>
+                  <h5 [innerHtml]="sectionTwo.subtitle"></h5>
+                </a>
+                <p class="mb-4 text-sm">{{ sectionTwo.desc }}</p>
+                <p class="mb-4 text-sm">{{ sectionTwo.para }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionTwo.btnText }}</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionTwo = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionTwo">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="sectionTwoForm" *ngIf="sectionTwo">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionTwo.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
+                      placeholder="Subtitle" [(ngModel)]="sectionTwo.subtitle">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnText formControlName="btnText" required
+                      placeholder="Button Text" [(ngModel)]="sectionTwo.btnText">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
+                      placeholder="Button destination page" [(ngModel)]="sectionTwo.btnLink">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
+                      placeholder="Slider Image URL/Link" [(ngModel)]="sectionTwo.imageUrl">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
+                      required [(ngModel)]="sectionTwo.desc"></textarea>
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="More Description" #para formControlName="para"
+                      required [(ngModel)]="sectionTwo.para"></textarea>
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionTwo = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionTwoSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card card-body mt-4" *ngIf="sectionThree">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Help Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionThree.title"></h5>
+                </a>
+                <p [innerHtml]="sectionThree.subtitle"></p>
+
+                <div class="row">
+                  <div class="md-4" *ngIf="sectionThree.itemOne">
+                    <div class="card card-plain">
+                      <div class="card-header pb-2 p-2">
+                        <div class="row">
+                          <div class="col-md-2 svg">
+                            <img [src]="sectionThree.itemOne.icon" alt="">
+                          </div>
+                          <div class="col-md-10">
+                            {{ sectionThree.itemOne.title }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body p-2">
+                        {{ sectionThree.itemOne.desc }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="md-4" *ngIf="sectionThree.itemTwo">
+                    <div class="card card-plain">
+                      <div class="card-header pb-2 p-2">
+                        <div class="row">
+                          <div class="col-md-2 svg">
+                            <img [src]="sectionThree.itemTwo.icon" alt="">
+                          </div>
+                          <div class="col-md-10">
+                            {{ sectionThree.itemTwo.title }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body p-2">
+                        {{ sectionThree.itemTwo.desc }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="md-4" *ngIf="sectionThree.itemThree">
+                    <div class="card card-plain">
+                      <div class="card-header pb-2 p-2">
+                        <div class="row">
+                          <div class="col-md-2 svg">
+                            <img [src]="sectionThree.itemThree.icon" alt="">
+                          </div>
+                          <div class="col-md-10">
+                            {{ sectionThree.itemThree.title }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body p-2">
+                        {{ sectionThree.itemThree.desc }}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionThree = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionThree">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="sectionThreeForm" *ngIf="sectionThree">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionThree.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
+                      placeholder="Subtitle" [(ngModel)]="sectionThree.subtitle">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemOne">
+                    <input type="text" class="form-control" #itemOneTitle formControlName="itemOneTitle" required
+                      [(ngModel)]="sectionThree.itemOne.title">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemOne">
+                    <input type="text" class="form-control" #itemOneDesc formControlName="itemOneDesc" required
+                      [(ngModel)]="sectionThree.itemOne.desc">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemOne">
+                    <input type="text" class="form-control" #itemOneIcon formControlName="itemOneIcon" required
+                      [(ngModel)]="sectionThree.itemOne.icon">
+                  </div>
+
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemTwo">
+                    <input type="text" class="form-control" #itemTwoTitle formControlName="itemTwoTitle" required
+                      [(ngModel)]="sectionThree.itemTwo.title">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemTwo">
+                    <input type="text" class="form-control" #itemTwoDesc formControlName="itemTwoDesc" required
+                      [(ngModel)]="sectionThree.itemTwo.desc">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemTwo">
+                    <input type="text" class="form-control" #itemTwoIcon formControlName="itemTwoIcon" required
+                      [(ngModel)]="sectionThree.itemTwo.icon">
+                  </div>
+
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemThree">
+                    <input type="text" class="form-control" #itemThreeTitle formControlName="itemThreeTitle" required
+                      [(ngModel)]="sectionThree.itemThree.title">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemThree">
+                    <input type="text" class="form-control" #itemThreeDesc formControlName="itemThreeDesc" required
+                      [(ngModel)]="sectionThree.itemThree.desc">
+                  </div>
+                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemThree">
+                    <input type="text" class="form-control" #itemThreeIcon formControlName="itemThreeIcon" required
+                      [(ngModel)]="sectionThree.itemThree.icon">
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionThree = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionThreeSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card card-body mt-4" *ngIf="sectionFour">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Testimony Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionFour.title"></h5>
+                </a>
+                <p class="mb-4 text-sm">{{ sectionFour.desc }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionFour.btnText }}</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionFour = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionFour">
+              <div class="body">
+
+                <form (ngSubmit)="onSectionFourSubmit()" [formGroup]="sectionFourForm" *ngIf="sectionFour">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionFour.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnText formControlName="btnText" required
+                      placeholder="Button Text" [(ngModel)]="sectionFour.btnText">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
+                      placeholder="Button destination page" [(ngModel)]="sectionFour.btnLink">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
+                      required [(ngModel)]="sectionFour.desc"></textarea>
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionFour = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionFourSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card card-body mt-4" *ngIf="sectionFive">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Call To Action Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionFive.title"></h5>
+                </a>
+                <p class="mb-4 text-sm">{{ sectionFive.subtitle }}</p>
+                <p class="mb-4 text-sm">{{ sectionFive.desc }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionFive.btnText }}</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionFive = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionFive">
+              <div class="body">
+
+                <form (ngSubmit)="onSectionFiveSubmit()" [formGroup]="sectionFiveForm" *ngIf="sectionFive">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionFive.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnText formControlName="btnText" required
+                      placeholder="Button Text" [(ngModel)]="sectionFive.btnText">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
+                      [(ngModel)]="sectionFive.subtitle">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
+                      required [(ngModel)]="sectionFive.desc"></textarea>
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionFive = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionFiveSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+
+</div>

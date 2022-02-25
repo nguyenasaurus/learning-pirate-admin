@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+import { SignedInComponent } from './components/signed-in/signed-in.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { VerifyEmailComponent } from './components/verify-email/verify-email.com
     SignUpComponent,
     ForgotPasswordComponent,
     VerifyEmailComponent,
+    SignedInComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,197 @@
+<!-- Navbar -->
+<app-header [pages]="pages" [page]="page"></app-header>
+<!-- End Navbar -->
+<div class="container-fluid py-4">
+
+  <div class="card card-body mt-2" *ngIf="sectionOne">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">About Us Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-header p-0 mt-n4 mx-3">
+                <a class="d-block shadow-xl border-radius-xl">
+                  <img [src]="sectionOne.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                </a>
+              </div>
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionOne.title"></h5>
+                </a>
+                <p class="mb-4 text-sm">{{ sectionOne.subtitle }}</p>
+                <div class="mb-4 text-sm" [innerHtml]="sectionOne.desc"></div>
+                <div class="d-flex align-items-center justify-content-between pb-4">
+                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionOne.btnText }}</button>
+                </div>
+
+                <a>
+                  <h5 [innerHtml]="sectionOne.titleTwo"></h5>
+                </a>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionOne = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionOne">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="formAbout" *ngIf="sectionOne">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionOne.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
+                      placeholder="Subtitle" [(ngModel)]="sectionOne.subtitle">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnText formControlName="btnText" required
+                      placeholder="Button Text" [(ngModel)]="sectionOne.btnText">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
+                      placeholder="Button destination page" [(ngModel)]="sectionOne.btnLink">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
+                      placeholder="Slider Image URL/Link" [(ngModel)]="sectionOne.imageUrl">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Slider Description" #desc
+                      formControlName="desc" required [(ngModel)]="sectionOne.desc"></textarea>
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #titleTwo formControlName="titleTwo" required
+                      [(ngModel)]="sectionOne.titleTwo">
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionOne = false">Close</button>
+
+                  <button class="app-btn" (click)="onEditSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card card-body mt-4" *ngIf="sectionTwo">
+    <div class="row">
+
+      <div class="col-12 col-xl-8">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-3 p-3">
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center">
+                <h6 class="mb-0">Call To Action Section</h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3">
+
+            <div class="card card-blog card-plain">
+              <div class="card-body p-3">
+                <a>
+                  <h5 [innerHtml]="sectionTwo.title"></h5>
+                </a>
+                <p class="mb-4 text-sm">{{ sectionTwo.desc }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionTwo.btnText }}</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card card-plain h-100">
+          <div class="card-header pb-0 p-3">
+            <h6 class="mb-0 clickable" (click)="canEditSectionTwo = true">Click to Edit Content</h6>
+          </div>
+          <div class="card-body p-3" *ngIf="isAdmin">
+
+            <div class="form" *ngIf="canEditSectionTwo">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="sectionCtaForm" *ngIf="sectionTwo">
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
+                      [(ngModel)]="sectionTwo.title">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnText formControlName="btnText" required
+                      placeholder="Button Text" [(ngModel)]="sectionTwo.btnText">
+                  </div>
+                  <div class="input-group input-group-static my-3">
+                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
+                      placeholder="Button destination page" [(ngModel)]="sectionTwo.btnLink">
+                  </div>
+                  <div class="input-group input-group-dynamic">
+                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
+                      required [(ngModel)]="sectionTwo.desc"></textarea>
+                  </div>
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canEditSectionTwo = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionTwoSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+
+</div>

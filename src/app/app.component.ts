@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'Learning Pirate Admin';
+
+  uid: string = '';
+
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     // Check if local storage contains preferred theme mode

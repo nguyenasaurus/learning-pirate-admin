@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
 import { UserProfile } from 'src/app/interfaces/user';
 import { UserService } from 'src/app/services/user.service';
 
@@ -21,12 +22,19 @@ export class SettingsComponent implements OnInit {
   uid: string = '';
 
   canEdit = false;
+  selectedItem: any;
+  nextAccountType = '';
 
   isSubmitting = false;
   noDisplayName = false;
   noDisplayNameMessage = '';
   noPhoneNumber = false;
   noPhoneNumberMessage = '';
+
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
+  isAdmin = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,27 +48,31 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.uid = localStorage.getItem('lpuid')!;
 
+    this.checkLevel();
+
     this.userService.getUsers().subscribe((res: UserProfile[]) => {
       this.users = res;
+      this.dtTrigger.next(void 0);
     });
+
+    this.dtOptions = {
+      destroy: true,
+    };
   }
 
-  form = this.formBuilder.group({
-    displayName: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    phoneNumber: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-  });
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
+  editItem(item: any) {
+    if (item.accountType == 'Basic Account') {
+      this.nextAccountType = 'Admin Account';
+    } else {
+      this.nextAccountType = 'Basic Account';
+    }
+    this.canEdit = true;
+    this.selectedItem = item;
+  }
 
   /**
    * User registration
@@ -69,59 +81,36 @@ export class SettingsComponent implements OnInit {
    * @returns user data
    */
   async onSubmit() {
-    if (this.form.invalid) {
-      this.toast.error(
-        'Please provide valid data. Remember all fields are required',
-        'Request Denied'
-      );
-      return;
-    } else {
-      this.isSubmitting = true;
-      this.form.disable;
+    this.isSubmitting = true;
 
-      let displayName = this.form.value.displayName;
-      let phoneNumber = this.form.value.phoneNumber;
+    let data = {
+      accountType: this.nextAccountType,
+    };
 
-      let data = {
-        displayName: displayName,
-        phoneNumber: phoneNumber,
-      };
-
-      this.userService
-        .update(this.uid, data)
-        .then(() => {
-          this.toast.success(
-            'You have successfully updated your profile information.',
-            'Request Successful'
-          );
-          this.isSubmitting = false;
-          this.form.enable;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isSubmitting = false;
-          this.form.enable;
-        });
-    }
+    this.userService
+      .updateAccountType(this.selectedItem.id, data)
+      .then(() => {
+        this.toast.success(
+          'You have successfully updated user account type.',
+          'Request Successful'
+        );
+        this.isSubmitting = false;
+        this.canEdit = false;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.isSubmitting = false;
+      });
   }
 
-  checkName() {
-    let displayName = this.form.value.displayName;
-    if (displayName == '') {
-      this.noDisplayName = true;
-      this.noDisplayNameMessage = 'Valid name is required';
-    } else {
-      this.noDisplayName = false;
-    }
-  }
-
-  checkPhoneNumber() {
-    let phoneNumber = this.form.value.phoneNumber;
-    if (phoneNumber == '') {
-      this.noPhoneNumber = true;
-      this.noPhoneNumberMessage = 'Valid name is required';
-    } else {
-      this.noPhoneNumber = false;
-    }
+  // check level
+  async checkLevel() {
+    await this.userService.getUserById(this.uid).subscribe((result) => {
+      if (result.accountType != 'Admin Account') {
+        this.isAdmin = false;
+      } else {
+        this.isAdmin = true;
+      }
+    });
   }
 }

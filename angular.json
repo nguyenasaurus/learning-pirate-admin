@@ -33,7 +33,8 @@
             "styles": [
               "src/assets/css/material-dashboard.css",
               "src/styles.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
             ],
             "scripts": [
               "src/assets/js/core/popper.min.js",
@@ -41,20 +42,23 @@
               "src/assets/js/plugins/perfect-scrollbar.min.js",
               "src/assets/js/plugins/smooth-scrollbar.min.js",
               "src/assets/js/plugins/chartjs.min.js",
-              "src/assets/js/material-dashboard.js"
+              "src/assets/js/material-dashboard.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/datatables.net/js/jquery.dataTables.min.js",
+              "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"
             ]
           },
           "configurations": {
             "production": {
               "budgets": [{
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "12mb"
                 }
               ],
               "fileReplacements": [{

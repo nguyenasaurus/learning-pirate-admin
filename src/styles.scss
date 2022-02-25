@@ -204,6 +204,27 @@ b {
   color: var(--white);
 }
 
+.info-bg {
+  background: var(--switch-bgLightModeColor);
+  color: #1f283e;
+}
+
+.img-holder {
+  width: toRem(150);
+  width: auto;
+}
+
+.img-holder img {
+  width: 100%;
+}
+
+.svg {
+  width: 50px;
+}
+.svg img {
+  width: 100%;
+}
+
 /* ======= Authentication ======= */
 .split-screen {
   display: grid;
@@ -522,6 +543,35 @@ span {
     0 3px 1px -2px var(--primary-light), 0 1px 5px 0 var(--primary-light) !important;
 }
 
+.btn-primary,
+.btn.bg-gradient-primary {
+  box-shadow: 0 3px 3px 0 var(--primary-light),
+    0 3px 1px -2px var(--primary-light), 0 1px 5px 0 var(--primary-light) !important;
+}
+.btn-primary {
+  color: var(--white);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+.input-group.input-group-dynamic .form-control,
+.input-group.input-group-dynamic .form-control:focus,
+.input-group.input-group-static .form-control,
+.input-group.input-group-static .form-control:focus {
+  background-image: linear-gradient(
+      0deg,
+      var(--primary) 2px,
+      rgba(156, 39, 176, 0) 0
+    ),
+    linear-gradient(0deg, #d2d2d2 1px, rgba(209, 209, 209, 0) 0);
+  border-radius: 0 !important;
+}
+
 .user-profile {
   display: flex;
   justify-content: center;
@@ -589,6 +639,51 @@ span {
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.table-holder {
+  width: 50%;
+}
+.table {
+  width: 100%;
+}
+.table td,
+.table th {
+  white-space: normal !important;
+}
+
+.w5 {
+  width: 5% !important;
+}
+.w10 {
+  width: 10% !important;
+}
+.w15 {
+  width: 15% !important;
+}
+.w20 {
+  width: 20% !important;
+}
+.w25 {
+  width: 25% !important;
+}
+.w30 {
+  width: 30% !important;
+}
+.w35 {
+  width: 35% !important;
+}
+.w40 {
+  width: 40% !important;
+}
+.w45 {
+  width: 45% !important;
+}
+.w50 {
+  width: 50% !important;
+}
+.w100 {
+  width: 100% !important;
 }
 
 /* ========= END CUSTOM ========== */

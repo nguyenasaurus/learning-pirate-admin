@@ -10,8 +10,18 @@
 
 <hr class="horizontal light mt-0 mb-2">
 
-<div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
-  <ul class="navbar-nav">
+<div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main" *ngIf="user">
+
+  <ul class="navbar-nav" *ngIf="user.accountType == 'Admin Account'">
+
+    <!-- <li class="nav-item">
+      <a class="nav-link text-white " routerLink="/dashboard" routerLinkActive="active bg-gradient-primary">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+          <i class="ri-dashboard-line"></i>
+        </div>
+        <span class="nav-link-text ms-1 text-white">Dashboard</span>
+      </a>
+    </li> -->
 
     <li class="nav-item mt-3">
       <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Manage Pages</h6>
