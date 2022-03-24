@@ -3,8 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
-import { Conference } from 'src/app/interfaces/conference';
-import { ConferenceService } from 'src/app/services/conference.service';
 import { UserService } from 'src/app/services/user.service';
 
 import {
@@ -13,20 +11,22 @@ import {
   ParsedResponseHeaders,
 } from 'ng2-file-upload';
 import { Cloudinary } from '@cloudinary/angular-5.x';
+import { Bod } from 'src/app/interfaces/bod';
+import { BodService } from 'src/app/services/bod.service';
 
 @Component({
-  selector: 'app-conferences',
-  templateUrl: './conferences.component.html',
-  styleUrls: ['./conferences.component.scss'],
+  selector: 'app-board-of-director',
+  templateUrl: './board-of-director.component.html',
+  styleUrls: ['./board-of-director.component.scss'],
 })
-export class ConferencesComponent implements OnInit {
+export class BoardOfDirectorComponent implements OnInit {
   pages = [
-    { url: '/conferences', title: 'Media' },
-    { url: '/conferences', title: 'Conferences' },
+    { url: '/board-members', title: 'Team' },
+    { url: '/board-members', title: 'Board Members' },
   ];
-  page = 'Conference';
+  page = 'Board Members';
 
-  conferences: Conference[] = [];
+  bods: Bod[] = [];
 
   selectedItem: any;
   chosenItem: any;
@@ -50,7 +50,7 @@ export class ConferencesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private titleService: Title,
     private toast: ToastrService,
-    private conferenceService: ConferenceService,
+    private bodService: BodService,
     private userService: UserService,
     private cloudinary: Cloudinary,
     private zone: NgZone
@@ -64,8 +64,8 @@ export class ConferencesComponent implements OnInit {
 
     this.checkLevel();
 
-    this.conferenceService.getConferences().subscribe((res: Conference[]) => {
-      this.conferences = res;
+    this.bodService.getbods().subscribe((res: Bod[]) => {
+      this.bods = res;
       this.dtTrigger.next(void 0);
     });
 
@@ -188,20 +188,6 @@ export class ConferencesComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    publishedOn: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    url: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
   });
 
   async onSubmit() {
@@ -218,22 +204,18 @@ export class ConferencesComponent implements OnInit {
       let title = this.form.value.title;
       let description = this.form.value.description;
       let imageUrl = this.uploadedUrl;
-      let publishedOn = this.form.value.publishedOn;
-      let url = this.form.value.url;
 
       let data = {
         title: title,
         description: description,
         imageUrl: imageUrl,
-        publishedOn: publishedOn,
-        url: url,
       };
 
-      this.conferenceService
+      this.bodService
         .create(data)
         .then(() => {
           this.toast.success(
-            'You have successfully added a new conference.',
+            'You have successfully added a board member.',
             'Request Successful'
           );
           this.isSubmitting = false;
@@ -262,22 +244,18 @@ export class ConferencesComponent implements OnInit {
       let title = this.form.value.title;
       let description = this.form.value.description;
       let imageUrl = this.uploadedUrl;
-      let publishedOn = this.form.value.publishedOn;
-      let url = this.form.value.url;
 
       let data = {
         title: title,
         description: description,
         imageUrl: imageUrl,
-        publishedOn: publishedOn,
-        url: url,
       };
 
-      this.conferenceService
+      this.bodService
         .update(this.chosenItem.id, data)
         .then(() => {
           this.toast.success(
-            'You have successfully updated an item.',
+            'You have successfully updated a board member.',
             'Request Successful'
           );
           this.isSubmitting = false;
@@ -294,6 +272,7 @@ export class ConferencesComponent implements OnInit {
   editItem(item: any) {
     this.canEdit = true;
     this.chosenItem = item;
+    this.uploadedUrl = this.chosenItem.imageUrl;
   }
 
   deleteItem(item: any) {
@@ -301,8 +280,8 @@ export class ConferencesComponent implements OnInit {
   }
 
   async onDelete(id: string) {
-    this.conferenceService.delete(id).then(() => {
-      this.toast.success('Item deletion successful', 'Request Successful');
+    this.bodService.delete(id).then(() => {
+      this.toast.success('Member deletion successful', 'Request Successful');
       window.location.reload();
     });
   }

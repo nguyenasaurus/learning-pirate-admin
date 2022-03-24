@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,13 @@ import {
 } from 'src/app/interfaces/home';
 import { HomeService } from 'src/app/services/home.service';
 import { UserService } from 'src/app/services/user.service';
+
+import {
+  FileUploader,
+  FileUploaderOptions,
+  ParsedResponseHeaders,
+} from 'ng2-file-upload';
+import { Cloudinary } from '@cloudinary/angular-5.x';
 
 @Component({
   selector: 'app-home',
@@ -35,35 +42,62 @@ export class HomeComponent implements OnInit {
   sectionOne: Home = {};
   sectionOneId = 'sectionOne';
   canEditSectionOne = false;
+  canUploadSectionOne = false;
 
   sectionTwo: HomeSectionTwo = {};
   sectionTwoId = 'sectionTwo';
   canEditSectionTwo = false;
   chosenItemTwo: any;
+  canUploadSectionTwo = false;
 
   sectionThree: HomeSectionThree = {};
   sectionThreeId = 'sectionThree';
   canEditSectionThree = false;
+  canUploadSectionThree = false;
   chosenItemThree: any;
 
   sectionFour: HomeSectionFour = {};
   sectionFourId = 'sectionFour';
   canEditSectionFour = false;
+  canUploadSectionFour = false;
   chosenItemFour: any;
 
   sectionFive: HomeSectionFive = {};
   sectionFiveId = 'sectionFive';
   canEditSectionFive = false;
+  canUploadSectionFive = false;
   chosenItemFive: any;
+
+  imageSrc!: any;
+  uploadedUrl!: any;
+  public uploader: any = FileUploader;
+  imageTitle: string = '';
+  hasBaseDropZoneOver: boolean = false;
+  @Input() responses: Array<any>;
+
+  btnPages = [
+    { title: 'Contact Me', url: '/contact-me' },
+    { title: 'Membership', url: '/membership' },
+  ];
+
+  selectedBtnPage = '';
+  selectedBtnPageUrl = '';
+  selectedBtnPage2 = '';
+  selectedBtnPageUrl2 = '';
+  selectedBtnPage4 = '';
+  selectedBtnPageUrl4 = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private titleService: Title,
     private toast: ToastrService,
     private homeService: HomeService,
-    private userService: UserService
+    private userService: UserService,
+    private cloudinary: Cloudinary,
+    private zone: NgZone
   ) {
     this.titleService.setTitle(this.page);
+    this.responses = [];
   }
 
   ngOnInit(): void {
@@ -73,12 +107,14 @@ export class HomeComponent implements OnInit {
 
     this.homeService.getById(this.sectionOneId).subscribe((res: Home) => {
       this.sectionOne = res;
+      this.selectedBtnPageUrl = res.btnLink!;
     });
 
     this.homeService
       .getById(this.sectionTwoId)
       .subscribe((res: HomeSectionTwo) => {
         this.sectionTwo = res;
+        this.selectedBtnPageUrl2 = res.btnLink!;
       });
 
     this.homeService
@@ -98,6 +134,105 @@ export class HomeComponent implements OnInit {
       .subscribe((res: HomeSectionFive) => {
         this.sectionFive = res;
       });
+
+    // File Upload
+    // Create the file uploader, wire it to upload to your account
+    const uploaderOptions: FileUploaderOptions = {
+      url: `https://api.cloudinary.com/v1_1/${
+        this.cloudinary.config().cloud_name
+      }/upload`,
+      autoUpload: true,
+      isHTML5: true,
+      removeAfterUpload: true,
+      headers: [
+        {
+          name: 'X-Requested-With',
+          value: 'XMLHttpRequest',
+        },
+      ],
+    };
+
+    this.uploader = new FileUploader(uploaderOptions);
+
+    this.uploader.onBuildItemForm = (fileItem: any, form: FormData): any => {
+      form.append('upload_preset', this.cloudinary.config().upload_preset);
+      let tags = 'tocadmin';
+      if (this.imageTitle) {
+        form.append('context', `photo=${this.imageTitle}`);
+        tags = `tocadmin,${this.imageTitle}`;
+      }
+
+      form.append('folder', 'tocadmin');
+      form.append('tags', tags);
+      form.append('file', fileItem);
+
+      fileItem.withCredentials = false;
+      return { fileItem, form };
+    };
+
+    // Insert or update an entry in the responses array
+    const upsertResponse = (fileItem: any) => {
+      this.zone.run(() => {
+        const existingId = this.responses.reduce(
+          (prev: any, current: any, index: any) => {
+            if (current.file.name === fileItem.file.name && !current.status) {
+              return index;
+            }
+            return prev;
+          },
+          -1
+        );
+        if (existingId > -1) {
+          this.responses[existingId] = Object.assign(
+            this.responses[existingId],
+            fileItem
+          );
+        } else {
+          this.responses.push(fileItem);
+        }
+
+        // Process response
+        this.responses.forEach((item: any) => {
+          this.uploadedUrl = item.data.secure_url;
+        });
+      });
+    };
+
+    // Update model on completion of uploading a file
+    this.uploader.onCompleteItem = (
+      item: any,
+      response: string,
+      status: number,
+      headers: ParsedResponseHeaders
+    ) =>
+      upsertResponse({
+        file: item.file,
+        status,
+        data: JSON.parse(response),
+      });
+
+    // Update model on upload progress event
+    this.uploader.onProgressItem = (fileItem: any, progress: any) =>
+      upsertResponse({
+        file: fileItem.file,
+        progress,
+        data: {},
+      });
+  }
+
+  setActiveItem(item: any) {
+    this.selectedBtnPage = item.url;
+    this.selectedBtnPageUrl = item.url;
+  }
+
+  setActiveItem2(item: any) {
+    this.selectedBtnPage2 = item.url;
+    this.selectedBtnPageUrl2 = item.url;
+  }
+
+  setActiveItem4(item: any) {
+    this.selectedBtnPage4 = item.url;
+    this.selectedBtnPageUrl4 = item.url;
   }
 
   // check level
@@ -119,6 +254,7 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    titleSpan: [''],
     subtitle: [
       '',
       {
@@ -127,20 +263,6 @@ export class HomeComponent implements OnInit {
       },
     ],
     btnText: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    imageUrl: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnLink: [
       '',
       {
         validators: [Validators.required],
@@ -161,15 +283,15 @@ export class HomeComponent implements OnInit {
       this.formSlider.disable;
 
       let title = this.formSlider.value.title;
+      let titleSpan = this.formSlider.value.titleSpan;
       let subtitle = this.formSlider.value.subtitle;
-      let btnLink = this.formSlider.value.btnLink;
-      let imageUrl = this.formSlider.value.imageUrl;
+      let btnLink = this.selectedBtnPageUrl;
       let btnText = this.formSlider.value.btnText;
 
       let data = {
         title: title,
+        titleSpan: titleSpan,
         subtitle: subtitle,
-        imageUrl: imageUrl,
         btnLink: btnLink,
         btnText: btnText,
       };
@@ -192,6 +314,39 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  async onSectionOneImageSubmit() {
+    if (this.uploadedUrl == '') {
+      this.toast.error(
+        'Please select a valid image to upload.',
+        'Request Denied'
+      );
+      return;
+    } else {
+      this.isSubmitting = true;
+
+      let imageUrl = this.uploadedUrl;
+
+      let data = {
+        imageUrl: imageUrl,
+      };
+
+      this.homeService
+        .update(this.sectionOneId, data)
+        .then(() => {
+          this.toast.success(
+            'You have successfully updated a home section.',
+            'Request Successful'
+          );
+          this.isSubmitting = false;
+          this.canUploadSectionOne = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isSubmitting = false;
+        });
+    }
+  }
+
   editItem(item: any) {
     this.canEdit = true;
     this.chosenItem = item;
@@ -201,13 +356,6 @@ export class HomeComponent implements OnInit {
     this.selectedItem = item;
   }
 
-  // async onDelete(id: string) {
-  //   this.home.delete(id).then(() => {
-  //     this.toast.success('Testimony deletion successful', 'Request Successful');
-  //     window.location.reload();
-  //   });
-  // }
-
   sectionTwoForm = this.formBuilder.group({
     title: [
       '',
@@ -216,28 +364,8 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    subtitle: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
+    titleSpan: [''],
     btnText: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    imageUrl: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnLink: [
       '',
       {
         validators: [Validators.required],
@@ -272,17 +400,15 @@ export class HomeComponent implements OnInit {
       this.sectionTwoForm.disable;
 
       let title = this.sectionTwoForm.value.title;
-      let subtitle = this.sectionTwoForm.value.subtitle;
-      let btnLink = this.sectionTwoForm.value.btnLink;
-      let imageUrl = this.sectionTwoForm.value.imageUrl;
+      let titleSpan = this.sectionTwoForm.value.titleSpan;
+      let btnLink = this.selectedBtnPageUrl2;
       let btnText = this.sectionTwoForm.value.btnText;
       let desc = this.sectionTwoForm.value.desc;
       let para = this.sectionTwoForm.value.para;
 
       let data = {
         title: title,
-        subtitle: subtitle,
-        imageUrl: imageUrl,
+        titleSpan: titleSpan,
         btnLink: btnLink,
         btnText: btnText,
         desc: desc,
@@ -307,6 +433,39 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  async onSectionTwoImageSubmit() {
+    if (this.uploadedUrl == '') {
+      this.toast.error(
+        'Please select a valid image to upload.',
+        'Request Denied'
+      );
+      return;
+    } else {
+      this.isSubmitting = true;
+
+      let imageUrl = this.uploadedUrl;
+
+      let data = {
+        imageUrl: imageUrl,
+      };
+
+      this.homeService
+        .update(this.sectionTwoId, data)
+        .then(() => {
+          this.toast.success(
+            'You have successfully updated a home section.',
+            'Request Successful'
+          );
+          this.isSubmitting = false;
+          this.canUploadSectionTwo = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isSubmitting = false;
+        });
+    }
+  }
+
   editSectionTwoItem(item: any) {
     this.canEditSectionTwo = true;
     this.chosenItemTwo = item;
@@ -320,6 +479,7 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    titleSpan: [''],
     subtitle: [
       '',
       {
@@ -341,13 +501,6 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    itemOneIcon: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
     itemTwoTitle: [
       '',
       {
@@ -356,13 +509,6 @@ export class HomeComponent implements OnInit {
       },
     ],
     itemTwoDesc: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    itemTwoIcon: [
       '',
       {
         validators: [Validators.required],
@@ -383,13 +529,6 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    itemThreeIcon: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
   });
 
   async onSectionThreeSubmit() {
@@ -403,20 +542,26 @@ export class HomeComponent implements OnInit {
       this.isSubmitting = true;
       this.sectionThreeForm.disable;
 
+      let itemOneIcon =
+        'https://firebasestorage.googleapis.com/v0/b/learning-pirate.appspot.com/o/bbb.svg?alt=media&token=6f97e5e5-66de-43bf-b7a0-ae0512928522';
+      let itemTwoIcon =
+        'https://firebasestorage.googleapis.com/v0/b/learning-pirate.appspot.com/o/ccc.svg?alt=media&token=a18563ee-1262-43b6-8c60-b9be47f8d116';
+      let itemThreeIcon =
+        'https://firebasestorage.googleapis.com/v0/b/learning-pirate.appspot.com/o/aaa.svg?alt=media&token=8955a41a-4a47-4900-8fc2-6ed314e544e1';
+
       let title = this.sectionThreeForm.value.title;
+      let titleSpan = this.sectionThreeForm.value.titleSpan;
       let subtitle = this.sectionThreeForm.value.subtitle;
       let itemOneTitle = this.sectionThreeForm.value.itemOneTitle;
       let itemOneDesc = this.sectionThreeForm.value.itemOneDesc;
-      let itemOneIcon = this.sectionThreeForm.value.itemOneIcon;
       let itemTwoTitle = this.sectionThreeForm.value.itemTwoTitle;
       let itemTwoDesc = this.sectionThreeForm.value.itemTwoDesc;
-      let itemTwoIcon = this.sectionThreeForm.value.itemTwoIcon;
       let itemThreeTitle = this.sectionThreeForm.value.itemThreeTitle;
       let itemThreeDesc = this.sectionThreeForm.value.itemThreeDesc;
-      let itemThreeIcon = this.sectionThreeForm.value.itemThreeIcon;
 
       let data = {
         title: title,
+        titleSpan: titleSpan,
         subtitle: subtitle,
         itemOne: {
           title: itemOneTitle,
@@ -466,27 +611,7 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    desc: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnText: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnLink: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
+    titleSpan: [''],
   });
 
   async onSectionFourSubmit() {
@@ -501,15 +626,11 @@ export class HomeComponent implements OnInit {
       this.sectionFourForm.disable;
 
       let title = this.sectionFourForm.value.title;
-      let desc = this.sectionFourForm.value.desc;
-      let btnText = this.sectionFourForm.value.btnText;
-      let btnLink = this.sectionFourForm.value.btnLink;
+      let titleSpan = this.sectionFourForm.value.titleSpan;
 
       let data = {
         title: title,
-        desc: desc,
-        btnText: btnText,
-        btnLink: btnLink,
+        titleSpan: titleSpan,
       };
 
       this.homeService
@@ -543,7 +664,15 @@ export class HomeComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    titleSpan: [''],
     desc: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'change',
+      },
+    ],
+    para: [
       '',
       {
         validators: [Validators.required],
@@ -578,13 +707,17 @@ export class HomeComponent implements OnInit {
       this.sectionFiveForm.disable;
 
       let title = this.sectionFiveForm.value.title;
+      let titleSpan = this.sectionFiveForm.value.titleSpan;
       let desc = this.sectionFiveForm.value.desc;
+      let para = this.sectionFiveForm.value.para;
       let btnText = this.sectionFiveForm.value.btnText;
       let subtitle = this.sectionFiveForm.value.subtitle;
 
       let data = {
         title: title,
+        titleSpan: titleSpan,
         desc: desc,
+        para: para,
         btnText: btnText,
         subtitle: subtitle,
       };
@@ -610,5 +743,13 @@ export class HomeComponent implements OnInit {
   editSectionFiveItem(item: any) {
     this.canEditSectionFive = true;
     this.chosenItemFive = item;
+  }
+
+  updateTitle(value: string) {
+    this.imageTitle = value;
+  }
+
+  fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
   }
 }

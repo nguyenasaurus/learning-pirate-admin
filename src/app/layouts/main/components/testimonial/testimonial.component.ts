@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -6,6 +6,13 @@ import { Subject } from 'rxjs';
 import { Testimonial } from 'src/app/interfaces/testimonial';
 import { TestimonialService } from 'src/app/services/testimonial.service';
 import { UserService } from 'src/app/services/user.service';
+
+import {
+  FileUploader,
+  FileUploaderOptions,
+  ParsedResponseHeaders,
+} from 'ng2-file-upload';
+import { Cloudinary } from '@cloudinary/angular-5.x';
 
 @Component({
   selector: 'app-testimonial',
@@ -32,14 +39,24 @@ export class TestimonialComponent implements OnInit {
   canEdit = false;
   isSubmitting = false;
 
+  imageSrc!: any;
+  uploadedUrl!: any;
+  public uploader: any = FileUploader;
+  imageTitle: string = '';
+  hasBaseDropZoneOver: boolean = false;
+  @Input() responses: Array<any>;
+
   constructor(
     private formBuilder: FormBuilder,
     private titleService: Title,
     private toast: ToastrService,
     private testimonialService: TestimonialService,
-    private userService: UserService
+    private userService: UserService,
+    private cloudinary: Cloudinary,
+    private zone: NgZone
   ) {
     this.titleService.setTitle(this.page);
+    this.responses = [];
   }
 
   ngOnInit(): void {
@@ -55,6 +72,90 @@ export class TestimonialComponent implements OnInit {
     this.dtOptions = {
       destroy: true,
     };
+
+    // File Upload
+    // Create the file uploader, wire it to upload to your account
+    const uploaderOptions: FileUploaderOptions = {
+      url: `https://api.cloudinary.com/v1_1/${
+        this.cloudinary.config().cloud_name
+      }/upload`,
+      autoUpload: true,
+      isHTML5: true,
+      removeAfterUpload: true,
+      headers: [
+        {
+          name: 'X-Requested-With',
+          value: 'XMLHttpRequest',
+        },
+      ],
+    };
+
+    this.uploader = new FileUploader(uploaderOptions);
+
+    this.uploader.onBuildItemForm = (fileItem: any, form: FormData): any => {
+      form.append('upload_preset', this.cloudinary.config().upload_preset);
+      let tags = 'tocadmin';
+      if (this.imageTitle) {
+        form.append('context', `photo=${this.imageTitle}`);
+        tags = `tocadmin,${this.imageTitle}`;
+      }
+
+      form.append('folder', 'tocadmin');
+      form.append('tags', tags);
+      form.append('file', fileItem);
+
+      fileItem.withCredentials = false;
+      return { fileItem, form };
+    };
+
+    // Insert or update an entry in the responses array
+    const upsertResponse = (fileItem: any) => {
+      this.zone.run(() => {
+        const existingId = this.responses.reduce(
+          (prev: any, current: any, index: any) => {
+            if (current.file.name === fileItem.file.name && !current.status) {
+              return index;
+            }
+            return prev;
+          },
+          -1
+        );
+        if (existingId > -1) {
+          this.responses[existingId] = Object.assign(
+            this.responses[existingId],
+            fileItem
+          );
+        } else {
+          this.responses.push(fileItem);
+        }
+
+        // Process response
+        this.responses.forEach((item: any) => {
+          this.uploadedUrl = item.data.secure_url;
+        });
+      });
+    };
+
+    // Update model on completion of uploading a file
+    this.uploader.onCompleteItem = (
+      item: any,
+      response: string,
+      status: number,
+      headers: ParsedResponseHeaders
+    ) =>
+      upsertResponse({
+        file: item.file,
+        status,
+        data: JSON.parse(response),
+      });
+
+    // Update model on upload progress event
+    this.uploader.onProgressItem = (fileItem: any, progress: any) =>
+      upsertResponse({
+        file: fileItem.file,
+        progress,
+        data: {},
+      });
   }
 
   ngOnDestroy(): void {
@@ -94,20 +195,6 @@ export class TestimonialComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    imageUrl: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    company: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
   });
 
   async onSubmit() {
@@ -124,14 +211,12 @@ export class TestimonialComponent implements OnInit {
       let name = this.form.value.name;
       let title = this.form.value.title;
       let testimony = this.form.value.testimony;
-      let imageUrl = this.form.value.imageUrl;
-      let company = this.form.value.company;
+      let imageUrl = this.uploadedUrl;
 
       let data = {
         title: title,
         testimony: testimony,
         imageUrl: imageUrl,
-        company: company,
         name: name,
       };
 
@@ -168,14 +253,12 @@ export class TestimonialComponent implements OnInit {
       let name = this.form.value.name;
       let title = this.form.value.title;
       let testimony = this.form.value.testimony;
-      let imageUrl = this.form.value.imageUrl;
-      let company = this.form.value.company;
+      let imageUrl = this.uploadedUrl;
 
       let data = {
         title: title,
         testimony: testimony,
         imageUrl: imageUrl,
-        company: company,
         name: name,
       };
 
@@ -201,6 +284,7 @@ export class TestimonialComponent implements OnInit {
   editItem(item: any) {
     this.canEdit = true;
     this.chosenItem = item;
+    this.uploadedUrl = item.imageUrl;
   }
 
   deleteItem(item: any) {
@@ -212,5 +296,13 @@ export class TestimonialComponent implements OnInit {
       this.toast.success('Testimony deletion successful', 'Request Successful');
       window.location.reload();
     });
+  }
+
+  updateTitle(value: string) {
+    this.imageTitle = value;
+  }
+
+  fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
   }
 }

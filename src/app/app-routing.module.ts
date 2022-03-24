@@ -25,6 +25,8 @@ import { ArticlesComponent } from './layouts/main/components/articles/articles.c
 import { TestimonialComponent } from './layouts/main/components/testimonial/testimonial.component';
 import { SignedInComponent } from './layouts/auth/components/signed-in/signed-in.component';
 import { WebinarsComponent } from './layouts/main/components/webinars/webinars.component';
+import { BoardOfDirectorComponent } from './layouts/main/components/board-of-director/board-of-director.component';
+import { GalleryComponent } from './layouts/main/components/gallery/gallery.component';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['sign-in']);
 
@@ -100,6 +102,16 @@ const routes: Routes = [
         path: 'testimonials',
         ...canActivate(redirectToLogin),
         component: TestimonialComponent,
+      },
+      {
+        path: 'bods',
+        ...canActivate(redirectToLogin),
+        component: BoardOfDirectorComponent,
+      },
+      {
+        path: 'gallery',
+        ...canActivate(redirectToLogin),
+        component: GalleryComponent,
       },
     ],
   },

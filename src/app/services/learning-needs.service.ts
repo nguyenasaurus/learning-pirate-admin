@@ -12,7 +12,10 @@ import {
   setDoc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { LearningNeedSectionOne } from '../interfaces/learning-need';
+import {
+  LdProcesses,
+  LearningNeedSectionOne,
+} from '../interfaces/learning-need';
 
 @Injectable({
   providedIn: 'root',
@@ -42,8 +45,15 @@ export class LearningNeedsService {
     return deleteDoc(learningDesignRef);
   }
 
-  // getAll(): Observable<About[]> {
-  //   const aboutRef = collection(this.firestore, 'about');
-  //   return collectionData(aboutRef, { idField: 'id' }) as Observable<About[]>;
-  // }
+  getProcesses(): Observable<LdProcesses[]> {
+    const ldRef = collection(this.firestore, 'process');
+    return collectionData(ldRef, { idField: 'id' }) as Observable<
+      LdProcesses[]
+    >;
+  }
+
+  updateLearningDesign(id: string, data: any) {
+    const learningDesignRef = doc(this.firestore, `process/${id}`);
+    return updateDoc(learningDesignRef, data);
+  }
 }

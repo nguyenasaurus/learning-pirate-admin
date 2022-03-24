@@ -1,0 +1,19 @@
+ul {
+  list-style: none;
+  margin-left: 25px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+ul li::before {
+  content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  color: #7851a9;
+  font-weight: bold;
+  display: inline-block;
+  width: 1.5rem;
+  margin-left: -1.5rem;
+}

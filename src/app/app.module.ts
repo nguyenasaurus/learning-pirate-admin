@@ -17,6 +17,12 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { HotToastModule } from '@ngneat/hot-toast';
+import {
+  CloudinaryConfiguration,
+  CloudinaryModule,
+} from '@cloudinary/angular-5.x';
+import * as Cloudinary from 'cloudinary-core';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +45,11 @@ import { HotToastModule } from '@ngneat/hot-toast';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     HotToastModule.forRoot(),
+    CloudinaryModule.forRoot(Cloudinary, {
+      cloud_name: 'theoakcapital',
+      upload_preset: 'tocadmin',
+    }),
+    FileUploadModule,
   ],
   providers: [Title],
   bootstrap: [AppComponent],

@@ -24,6 +24,8 @@
                 </a>
                 <p class="mb-4 text-sm">{{ sectionOne.jobTitle }}</p>
                 <div class="mb-4 text-sm" [innerHtml]="sectionOne.quote"></div>
+                <div class="mb-4 text-sm" [innerHtml]="sectionOne.para1"></div>
+                <div class="mb-4 text-sm" [innerHtml]="sectionOne.para2"></div>
 
               </div>
             </div>
@@ -35,7 +37,8 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionOne = true">Click to Edit Content</h6>
+            <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionOne = true">Edit
+              Content</button>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -43,18 +46,52 @@
               <div class="body">
 
                 <form (ngSubmit)="onEditSubmit()" [formGroup]="formOne" *ngIf="sectionOne">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #author formControlName="author" required
-                      placeholder="aAthor" [(ngModel)]="sectionOne.author">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="author" type="text" class="form-field__input" placeholder=" " #author
+                        formControlName="author" [(ngModel)]="sectionOne.author" />
+                      <label for="author" class="form-field__label">Name</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #jobTitle formControlName="jobTitle" required
-                      placeholder="jobTitle" [(ngModel)]="sectionOne.jobTitle">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="jobTitle" type="text" class="form-field__input" placeholder=" " #jobTitle
+                        formControlName="jobTitle" [(ngModel)]="sectionOne.jobTitle" />
+                      <label for="jobTitle" class="form-field__label">Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="Quote" #quote formControlName="quote" required
-                      [(ngModel)]="sectionOne.quote"></textarea>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="quote" class="form-field__textarea" placeholder=" " #quote formControlName="quote"
+                        [(ngModel)]="sectionOne.quote"></textarea>
+                      <label for="quote" class="form-field__label">Paragraph One</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="para1" class="form-field__textarea" placeholder=" " #para1 formControlName="para1"
+                        [(ngModel)]="sectionOne.para1"></textarea>
+                      <label for="para1" class="form-field__label">Paragraph Two</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="para2" class="form-field__textarea" placeholder=" " #para2 formControlName="para2"
+                        [(ngModel)]="sectionOne.para2"></textarea>
+                      <label for="para2" class="form-field__label">Paragraph Three</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
                 </form>
 
               </div>
@@ -98,11 +135,28 @@
             <div class="card card-blog card-plain">
               <div class="card-body p-3">
                 <a>
-                  <h5 [innerHtml]="sectionTwo.title"></h5>
+                  <h5>
+                    {{ sectionTwo.title }} <span>{{ sectionTwo.titleSpan }}</span>
+                  </h5>
                 </a>
                 <p class="mb-4 text-sm">{{ sectionTwo.desc }}</p>
                 <div class="d-flex align-items-center justify-content-between">
                   <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionTwo.btnText }}</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <h3>Learning Design Process</h3>
+              <div class="card" *ngFor="let item of processes">
+                <div class="card-body">
+                  <h3>{{ item.position }} {{ item.title }}</h3>
+                  <p>{{ item.desc }}</p>
+                  <p>{{ item.para }}</p>
+                  <div class="mt-2">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="editProcess(item)">Edit
+                      Process</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,7 +168,9 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionTwo = true">Click to Edit Content</h6>
+            <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionTwo = true">Edit
+              Content</button>
+
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -122,22 +178,60 @@
               <div class="body">
 
                 <form (ngSubmit)="onEditSubmit()" [formGroup]="formTwo" *ngIf="sectionTwo">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
-                      [(ngModel)]="sectionTwo.title">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="sectionTwo.title" />
+                      <label for="title" class="form-field__label">Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnText formControlName="btnText" required
-                      placeholder="Button Text" [(ngModel)]="sectionTwo.btnText">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="titleSpan" type="text" class="form-field__input" placeholder=" " #titleSpan
+                        formControlName="titleSpan" [(ngModel)]="sectionTwo.titleSpan" />
+                      <label for="titleSpan" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
-                      placeholder="Button destination page" [(ngModel)]="sectionTwo.btnLink">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="additionalInfo" class="form-field__textarea" placeholder=" " #desc
+                        formControlName="desc" [(ngModel)]="sectionTwo.desc"></textarea>
+                      <label for="additionalInfo" class="form-field__label">
+                        Description</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
-                      required [(ngModel)]="sectionTwo.desc"></textarea>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="btnText" type="text" class="form-field__input" placeholder=" " #btnText
+                        formControlName="btnText" [(ngModel)]="sectionTwo.btnText" [(ngModel)]="sectionTwo.btnText" />
+                      <label for="btnText" class="form-field__label">Hero Button Text</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
+
+                  <div class="form-field">
+                    <p>Set Button Page</p>
+
+                    <div class="row">
+                      <div class="col-md-6" *ngFor="let item of btnPages" (click)="setActiveItem(item)">
+                        <div class="selector" [ngClass]="{'active': selectedBtnPageUrl == item.url}">
+                          {{ item.title }}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <small>NOTE: /membership takes user to Join The Crew page. While /contact-me takes them to contact me
+                    page.</small>
+
                 </form>
 
               </div>
@@ -146,6 +240,68 @@
                   <button class="app-btn-text" (click)="canEditSectionTwo = false">Close</button>
 
                   <button class="app-btn" (click)="onSectionTwoSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form" *ngIf="canAddProcess">
+              <div class="body">
+
+                <form (ngSubmit)="onEditSubmit()" [formGroup]="formProcess">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="position" type="text" class="form-field__input" placeholder=" " #position
+                        formControlName="position" [(ngModel)]="selectedProcess.position" />
+                      <label for="position" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="selectedProcess.title" />
+                      <label for="title" class="form-field__label">Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="additionalInfo" class="form-field__textarea" placeholder=" " #desc
+                        formControlName="desc" [(ngModel)]="selectedProcess.desc"></textarea>
+                      <label for="additionalInfo" class="form-field__label">
+                        Description</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="additionalInfo" class="form-field__textarea" placeholder=" " #para
+                        formControlName="para" [(ngModel)]="selectedProcess.para"></textarea>
+                      <label for="additionalInfo" class="form-field__label">
+                        Paragraph Two</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canAddProcess = false">Close</button>
+
+                  <button class="app-btn" (click)="onEditProcess()" [disabled]="isSubmitting"
                     [ngClass]="{'disabled': isSubmitting}">
                     <span *ngIf="isSubmitting">
                       <i class="ri-loader-2-line"></i> Processing

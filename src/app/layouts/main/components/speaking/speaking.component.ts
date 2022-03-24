@@ -54,6 +54,17 @@ export class SpeakingComponent implements OnInit {
   canEditSectionFour = false;
   chosenItemFour: any;
 
+  selectedBtnPage = '';
+  selectedBtnPageUrl = '';
+  selectedBtnPageUrl2 = '';
+  selectedBtnPageUrl3 = '';
+  selectedBtnPageUrl4 = '';
+
+  btnPages = [
+    { title: 'Contact Me', url: '/contact-me' },
+    { title: 'Membership', url: '/membership' },
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private titleService: Title,
@@ -73,25 +84,49 @@ export class SpeakingComponent implements OnInit {
       .getById(this.sectionOneId)
       .subscribe((res: SpeakingSectionOne) => {
         this.sectionOne = res;
+        this.selectedBtnPageUrl = res.btnLink!;
       });
 
     this.speakingService
       .getById(this.sectionTwoId)
       .subscribe((res: SpeakingSectionTwo) => {
         this.sectionTwo = res;
+        this.selectedBtnPageUrl2 = res.btnLink!;
       });
 
     this.speakingService
       .getById(this.sectionThreeId)
       .subscribe((res: SpeakingSectionThree) => {
         this.sectionThree = res;
+        this.selectedBtnPageUrl3 = res.btnLink!;
       });
 
     this.speakingService
       .getById(this.sectionFourId)
       .subscribe((res: SpeakingSectionFour) => {
         this.sectionFour = res;
+        this.selectedBtnPageUrl4 = res.btnLink!;
       });
+  }
+
+  setActiveItem(item: any) {
+    this.selectedBtnPage = item.url;
+    this.selectedBtnPageUrl = item.url;
+  }
+
+  setActiveItem2(item: any) {
+    this.selectedBtnPage = item.url;
+    this.selectedBtnPageUrl2 = item.url;
+  }
+
+  setActiveItem3(item: any) {
+    this.selectedBtnPage = item.url;
+    this.selectedBtnPageUrl3 = item.url;
+  }
+
+  setActiveItem4(item: any) {
+    this.selectedBtnPage = item.url;
+    this.selectedBtnPageUrl4 = item.url;
   }
 
   // check level
@@ -113,6 +148,13 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    headerSpan: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'change',
+      },
+    ],
     title: [
       '',
       {
@@ -120,7 +162,7 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    conference: [
+    titleSpan: [
       '',
       {
         validators: [Validators.required],
@@ -134,14 +176,9 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    desc2: [''],
+    desc3: [''],
     btnText: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnLink: [
       '',
       {
         validators: [Validators.required],
@@ -162,17 +199,23 @@ export class SpeakingComponent implements OnInit {
       this.formOne.disable;
 
       let header = this.formOne.value.header;
+      let headerSpan = this.formOne.value.headerSpan;
       let title = this.formOne.value.title;
-      let conference = this.formOne.value.conference;
+      let titleSpan = this.formOne.value.titleSpan;
       let desc = this.formOne.value.desc;
+      let desc2 = this.formOne.value.desc2;
+      let desc3 = this.formOne.value.desc3;
       let btnText = this.formOne.value.btnText;
-      let btnLink = this.formOne.value.btnLink;
+      let btnLink = this.selectedBtnPageUrl;
 
       let data = {
         header: header,
-        conference: conference,
+        headerSpan: headerSpan,
         title: title,
+        titleSpan: titleSpan,
         desc: desc,
+        desc2: desc2,
+        desc3: desc3,
         btnText: btnText,
         btnLink: btnLink,
       };
@@ -208,6 +251,13 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    headerSpan: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'change',
+      },
+    ],
     title: [
       '',
       {
@@ -215,7 +265,7 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    par: [
+    titleSpan: [
       '',
       {
         validators: [Validators.required],
@@ -229,14 +279,14 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    btnText: [
+    par: [
       '',
       {
         validators: [Validators.required],
         updateOn: 'change',
       },
     ],
-    btnLink: [
+    btnText: [
       '',
       {
         validators: [Validators.required],
@@ -257,17 +307,21 @@ export class SpeakingComponent implements OnInit {
       this.formTwo.disable;
 
       let header = this.formTwo.value.header;
+      let headerSpan = this.formTwo.value.headerSpan;
       let title = this.formTwo.value.title;
-      let par = this.formTwo.value.par;
+      let titleSpan = this.formTwo.value.titleSpan;
       let desc = this.formTwo.value.desc;
+      let par = this.formTwo.value.par;
       let btnText = this.formTwo.value.btnText;
-      let btnLink = this.formTwo.value.btnLink;
+      let btnLink = this.selectedBtnPageUrl2;
 
       let data = {
         header: header,
-        par: par,
+        headerSpan: headerSpan,
         title: title,
+        titleSpan: titleSpan,
         desc: desc,
+        par: par,
         btnText: btnText,
         btnLink: btnLink,
       };
@@ -317,21 +371,7 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    desc: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
     btnText: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnLink: [
       '',
       {
         validators: [Validators.required],
@@ -351,18 +391,16 @@ export class SpeakingComponent implements OnInit {
       this.isSubmitting = true;
       this.formThree.disable;
 
-      let subtitle = this.formOne.value.subtitle;
-      let title = this.formOne.value.title;
-      let conference = this.formOne.value.conference;
-      let desc = this.formOne.value.desc;
-      let btnText = this.formOne.value.btnText;
-      let btnLink = this.formOne.value.btnLink;
+      let subtitle = this.formThree.value.subtitle;
+      let par = this.formThree.value.par;
+      let title = this.formThree.value.title;
+      let btnText = this.formThree.value.btnText;
+      let btnLink = this.selectedBtnPageUrl3;
 
       let data = {
         subtitle: subtitle,
-        conference: conference,
         title: title,
-        desc: desc,
+        par: par,
         btnText: btnText,
         btnLink: btnLink,
       };
@@ -412,21 +450,7 @@ export class SpeakingComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    desc: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
     btnText: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    btnLink: [
       '',
       {
         validators: [Validators.required],
@@ -446,18 +470,16 @@ export class SpeakingComponent implements OnInit {
       this.isSubmitting = true;
       this.formFour.disable;
 
-      let subtitle = this.formOne.value.subtitle;
-      let title = this.formOne.value.title;
-      let conference = this.formOne.value.conference;
-      let desc = this.formOne.value.desc;
-      let btnText = this.formOne.value.btnText;
-      let btnLink = this.formOne.value.btnLink;
+      let subtitle = this.formFour.value.subtitle;
+      let title = this.formFour.value.title;
+      let par = this.formFour.value.par;
+      let btnText = this.formFour.value.btnText;
+      let btnLink = this.selectedBtnPageUrl4;
 
       let data = {
         subtitle: subtitle,
-        conference: conference,
+        par: par,
         title: title,
-        desc: desc,
         btnText: btnText,
         btnLink: btnLink,
       };

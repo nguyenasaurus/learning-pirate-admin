@@ -10,26 +10,36 @@
         <div class="card card-plain h-100">
           <div class="card-header pb-3 p-3">
             <div class="row">
-              <div class="col-md-6 d-flex align-items-center">
+              <div class="col-md-6">
                 <h6 class="mb-0">Slider Section</h6>
               </div>
             </div>
           </div>
           <div class="card-body p-3">
 
-            <div class="card card-blog card-plain">
-              <div class="card-header p-0 mt-n4 mx-3">
-                <a class="d-block shadow-xl border-radius-xl">
-                  <img [src]="sectionOne.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
-                </a>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card card-blog card-plain">
+                  <div class="card-header p-0 mt-n4 mx-3">
+                    <a class="d-block shadow-xl border-radius-xl">
+                      <img [src]="sectionOne.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="card-body p-3">
-                <a>
-                  <h5 [innerHtml]="sectionOne.title"></h5>
-                </a>
-                <p class="mb-4 text-sm">{{ sectionOne.subtitle }}</p>
-                <div class="d-flex align-items-center justify-content-between">
-                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionOne.btnText }}</button>
+              <div class="col-md-6">
+                <div class="card card-blog card-plain">
+                  <div class="card-body p-3">
+                    <a>
+                      <h5>
+                        {{ sectionOne.title }} <span>{{ sectionOne.titleSpan }}</span>
+                      </h5>
+                    </a>
+                    <p class="mb-4 text-sm">{{ sectionOne.subtitle }}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionOne.btnText }}</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -41,7 +51,16 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionOne = true">Click to Edit Content</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionOne = true">Edit
+                  Content</button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="btn btn-secondary btn-sm" (click)="canUploadSectionOne = true">Update
+                  Image</button>
+              </div>
+            </div>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -49,33 +68,61 @@
               <div class="body">
 
                 <form (ngSubmit)="onEditSubmit()" [formGroup]="formSlider" *ngIf="sectionOne">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
-                      [(ngModel)]="sectionOne.title">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="sectionOne.title" />
+                      <label for="title" class="form-field__label">Hero Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
-                      placeholder="Subtitle" [(ngModel)]="sectionOne.subtitle">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="titleSpan" type="text" class="form-field__input" placeholder=" " #titleSpan
+                        formControlName="titleSpan" [(ngModel)]="sectionOne.titleSpan" />
+                      <label for="titleSpan" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnText formControlName="btnText" required
-                      placeholder="Button Text" [(ngModel)]="sectionOne.btnText">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="additionalInfo" class="form-field__textarea" placeholder=" " #subtitle
+                        formControlName="subtitle" [(ngModel)]="sectionOne.subtitle"></textarea>
+                      <label for="additionalInfo" class="form-field__label">Hero
+                        Description</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
-                      placeholder="Button destination page" [(ngModel)]="sectionOne.btnLink">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="btnText" type="text" class="form-field__input" placeholder=" " #btnText
+                        formControlName="btnText" [(ngModel)]="sectionOne.btnText" [(ngModel)]="sectionOne.btnText" />
+                      <label for="btnText" class="form-field__label">Hero Button Text</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
-                      placeholder="Slider Image URL/Link" [(ngModel)]="sectionOne.imageUrl">
+
+                  <div class="form-field">
+                    <p>Set Button Page</p>
+
+                    <div class="row">
+                      <div class="col-md-6" *ngFor="let item of btnPages" (click)="setActiveItem(item)">
+                        <div class="selector" [ngClass]="{'active': selectedBtnPageUrl == item.url}">
+                          {{ item.title }}
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="Slider Description" #subtitle
-                      formControlName="subtitle" required [(ngModel)]="sectionOne.subtitle"></textarea>
-                  </div>
+
+                  <small>NOTE: /membership takes user to Join The Crew page. While /contact-me takes them to contact me
+                    page.</small>
+
                 </form>
-
-
 
               </div>
               <div class="footer">
@@ -83,6 +130,72 @@
                   <button class="app-btn-text" (click)="canEditSectionOne = false">Close</button>
 
                   <button class="app-btn" (click)="onEditSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form" *ngIf="canUploadSectionOne">
+              <div class="body">
+
+                <form (ngSubmit)="onSectionOneImageSubmit()" *ngIf="sectionOne">
+
+                  <div id="direct_upload" ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)"
+                    [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+                    <div class="row">
+                      <div class="form_line">
+                        <div class="form_controls">
+                          <div class="upload_button_holder">
+                            <label class="upload_button" for="fileupload">Select Image to Upload Here</label>
+                            <input type="file" id="fileupload" #fileInput ng2FileSelect [style.display]="'none'"
+                              [uploader]="uploader" (change)="fileInput.value=''" multiple />
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="file" *ngFor="let response of responses; let i = index">
+                        <p>{{response.file.name}}</p>
+                        <div class="status">
+                          <div *ngIf="!response.status">
+                            In progress... {{response.progress}}%
+                          </div>
+                          <div class="status-code" *ngIf="response.status">Upload completed</div>
+                        </div>
+
+                        <div class="requestProgress" *ngIf="!response.status">
+                          <div class="bar">
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="file" *ngFor="let response of responses; let i = index">
+                        <div class="form_line">
+                          <div class="form_controls">
+                            <div class="preview" *ngIf="uploadedUrl != ''">
+                              <img [src]="uploadedUrl" alt="" width="300px">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canUploadSectionOne = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionOneImageSubmit()" [disabled]="isSubmitting"
                     [ngClass]="{'disabled': isSubmitting}">
                     <span *ngIf="isSubmitting">
                       <i class="ri-loader-2-line"></i> Processing
@@ -115,23 +228,32 @@
           </div>
           <div class="card-body p-3">
 
-            <div class="card card-blog card-plain">
-              <div class="card-header p-0 mt-n4 mx-3">
-                <a class="d-block shadow-xl border-radius-xl">
-                  <img [src]="sectionTwo.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
-                </a>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card card-blog card-plain">
+                  <div class="card-header p-0 mt-n4 mx-3">
+                    <a class="d-block shadow-xl border-radius-xl">
+                      <img [src]="sectionTwo.imageUrl" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="card-body p-3">
-                <a>
-                  <h5 [innerHtml]="sectionTwo.title"></h5>
-                </a>
-                <a>
-                  <h5 [innerHtml]="sectionTwo.subtitle"></h5>
-                </a>
-                <p class="mb-4 text-sm">{{ sectionTwo.desc }}</p>
-                <p class="mb-4 text-sm">{{ sectionTwo.para }}</p>
-                <div class="d-flex align-items-center justify-content-between">
-                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionTwo.btnText }}</button>
+              <div class="col-md-6">
+                <div class="card card-blog card-plain">
+                  <div class="card-body p-3">
+                    <a>
+                      <h5><span>{{ sectionTwo.titleSpan }}</span></h5>
+                      <h5>{{ sectionTwo.title }}</h5>
+                    </a>
+                    <a>
+                      <h5 [innerHtml]="sectionTwo.subtitle"></h5>
+                    </a>
+                    <p class="mb-4 text-sm">{{ sectionTwo.desc }}</p>
+                    <p class="mb-4 text-sm">{{ sectionTwo.para }}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionTwo.btnText }}</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,7 +265,16 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionTwo = true">Click to Edit Content</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionTwo = true">Edit
+                  Content</button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="btn btn-secondary btn-sm" (click)="canUploadSectionTwo = true">Update
+                  Image</button>
+              </div>
+            </div>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -151,34 +282,68 @@
               <div class="body">
 
                 <form (ngSubmit)="onEditSubmit()" [formGroup]="sectionTwoForm" *ngIf="sectionTwo">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
-                      [(ngModel)]="sectionTwo.title">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="titleSpan" type="text" class="form-field__input" placeholder=" " #titleSpan
+                        formControlName="titleSpan" [(ngModel)]="sectionTwo.titleSpan" />
+                      <label for="titleSpan" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
-                      placeholder="Subtitle" [(ngModel)]="sectionTwo.subtitle">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="sectionTwo.title" />
+                      <label for="title" class="form-field__label">Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnText formControlName="btnText" required
-                      placeholder="Button Text" [(ngModel)]="sectionTwo.btnText">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="btnText" type="text" class="form-field__input" placeholder=" " #btnText
+                        formControlName="btnText" [(ngModel)]="sectionTwo.btnText" />
+                      <label for="btnText" class="form-field__label">Button Text</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
-                      placeholder="Button destination page" [(ngModel)]="sectionTwo.btnLink">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="desc" class="form-field__textarea" placeholder=" " #desc formControlName="desc"
+                        [(ngModel)]="sectionTwo.desc"></textarea>
+                      <label for="desc" class="form-field__label">Paragraph One</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #imageUrl formControlName="imageUrl" required
-                      placeholder="Slider Image URL/Link" [(ngModel)]="sectionTwo.imageUrl">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="para" class="form-field__textarea" placeholder=" " #para formControlName="para"
+                        [(ngModel)]="sectionTwo.para"></textarea>
+                      <label for="para" class="form-field__label">Paragraph Two</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
-                      required [(ngModel)]="sectionTwo.desc"></textarea>
+
+                  <div class="form-field">
+                    <p>Set Button Page</p>
+
+                    <div class="row">
+                      <div class="col-md-6" *ngFor="let item of btnPages" (click)="setActiveItem2(item)">
+                        <div class="selector" [ngClass]="{'active': selectedBtnPageUrl2 == item.url}">
+                          {{ item.title }}
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="More Description" #para formControlName="para"
-                      required [(ngModel)]="sectionTwo.para"></textarea>
-                  </div>
+
+                  <small>NOTE: /membership takes user to Join The Crew page. While /contact-me takes them to contact me
+                    page.</small>
+
                 </form>
 
               </div>
@@ -187,6 +352,72 @@
                   <button class="app-btn-text" (click)="canEditSectionTwo = false">Close</button>
 
                   <button class="app-btn" (click)="onSectionTwoSubmit()" [disabled]="isSubmitting"
+                    [ngClass]="{'disabled': isSubmitting}">
+                    <span *ngIf="isSubmitting">
+                      <i class="ri-loader-2-line"></i> Processing
+                    </span>
+                    <span *ngIf="!isSubmitting">Save Changes</span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form" *ngIf="canUploadSectionTwo">
+              <div class="body">
+
+                <form (ngSubmit)="onSectionTwoImageSubmit()" *ngIf="sectionTwo">
+
+                  <div id="direct_upload" ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)"
+                    [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
+                    <div class="row">
+                      <div class="form_line">
+                        <div class="form_controls">
+                          <div class="upload_button_holder">
+                            <label class="upload_button" for="fileupload">Select Image to Upload Here</label>
+                            <input type="file" id="fileupload" #fileInput ng2FileSelect [style.display]="'none'"
+                              [uploader]="uploader" (change)="fileInput.value=''" multiple />
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="file" *ngFor="let response of responses; let i = index">
+                        <p>{{response.file.name}}</p>
+                        <div class="status">
+                          <div *ngIf="!response.status">
+                            In progress... {{response.progress}}%
+                          </div>
+                          <div class="status-code" *ngIf="response.status">Upload completed</div>
+                        </div>
+
+                        <div class="requestProgress" *ngIf="!response.status">
+                          <div class="bar">
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="file" *ngFor="let response of responses; let i = index">
+                        <div class="form_line">
+                          <div class="form_controls">
+                            <div class="preview" *ngIf="uploadedUrl != ''">
+                              <img [src]="uploadedUrl" alt="" width="300px">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="footer">
+                <div class="space-between">
+                  <button class="app-btn-text" (click)="canUploadSectionTwo = false">Close</button>
+
+                  <button class="app-btn" (click)="onSectionTwoImageSubmit()" [disabled]="isSubmitting"
                     [ngClass]="{'disabled': isSubmitting}">
                     <span *ngIf="isSubmitting">
                       <i class="ri-loader-2-line"></i> Processing
@@ -222,7 +453,9 @@
             <div class="card card-blog card-plain">
               <div class="card-body p-3">
                 <a>
-                  <h5 [innerHtml]="sectionThree.title"></h5>
+                  <h5>
+                    {{ sectionThree.title }} <span>{{ sectionThree.titleSpan }}</span>
+                  </h5>
                 </a>
                 <p [innerHtml]="sectionThree.subtitle"></p>
 
@@ -292,7 +525,8 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionThree = true">Click to Edit Content</h6>
+            <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionThree = true">Edit
+              Content</button>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -300,51 +534,86 @@
               <div class="body">
 
                 <form (ngSubmit)="onEditSubmit()" [formGroup]="sectionThreeForm" *ngIf="sectionThree">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
-                      [(ngModel)]="sectionThree.title">
-                  </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
-                      placeholder="Subtitle" [(ngModel)]="sectionThree.subtitle">
-                  </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemOne">
-                    <input type="text" class="form-control" #itemOneTitle formControlName="itemOneTitle" required
-                      [(ngModel)]="sectionThree.itemOne.title">
-                  </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemOne">
-                    <input type="text" class="form-control" #itemOneDesc formControlName="itemOneDesc" required
-                      [(ngModel)]="sectionThree.itemOne.desc">
-                  </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemOne">
-                    <input type="text" class="form-control" #itemOneIcon formControlName="itemOneIcon" required
-                      [(ngModel)]="sectionThree.itemOne.icon">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="sectionThree.title" />
+                      <label for="title" class="form-field__label">Hero Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
 
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemTwo">
-                    <input type="text" class="form-control" #itemTwoTitle formControlName="itemTwoTitle" required
-                      [(ngModel)]="sectionThree.itemTwo.title">
-                  </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemTwo">
-                    <input type="text" class="form-control" #itemTwoDesc formControlName="itemTwoDesc" required
-                      [(ngModel)]="sectionThree.itemTwo.desc">
-                  </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemTwo">
-                    <input type="text" class="form-control" #itemTwoIcon formControlName="itemTwoIcon" required
-                      [(ngModel)]="sectionThree.itemTwo.icon">
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="titleSpan" type="text" class="form-field__input" placeholder=" " #titleSpan
+                        formControlName="titleSpan" [(ngModel)]="sectionThree.titleSpan" />
+                      <label for="titleSpan" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
 
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemThree">
-                    <input type="text" class="form-control" #itemThreeTitle formControlName="itemThreeTitle" required
-                      [(ngModel)]="sectionThree.itemThree.title">
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="subtitle" type="text" class="form-field__input" placeholder=" " #subtitle
+                        formControlName="subtitle" [(ngModel)]="sectionThree.subtitle" />
+                      <label for="subtitle" class="form-field__label">Subtitle</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemThree">
-                    <input type="text" class="form-control" #itemThreeDesc formControlName="itemThreeDesc" required
-                      [(ngModel)]="sectionThree.itemThree.desc">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="itemOneTitle" type="text" class="form-field__input" placeholder=" " #itemOneTitle
+                        formControlName="itemOneTitle" [(ngModel)]="sectionThree.itemOne.title" />
+                      <label for="itemOneTitle" class="form-field__label">Item One Tile</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3" *ngIf="sectionThree.itemThree">
-                    <input type="text" class="form-control" #itemThreeIcon formControlName="itemThreeIcon" required
-                      [(ngModel)]="sectionThree.itemThree.icon">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="itemOneDesc" type="text" class="form-field__input" placeholder=" " #itemOneDesc
+                        formControlName="itemOneDesc" [(ngModel)]="sectionThree.itemOne.desc" />
+                      <label for="itemOneDesc" class="form-field__label">Item One Tile</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="itemTwoTitle" type="text" class="form-field__input" placeholder=" " #itemTwoTitle
+                        formControlName="itemTwoTitle" [(ngModel)]="sectionThree.itemTwo.title" />
+                      <label for="itemTwoTitle" class="form-field__label">Item Two Tile</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="itemTwoDesc" type="text" class="form-field__input" placeholder=" " #itemTwoDesc
+                        formControlName="itemTwoDesc" [(ngModel)]="sectionThree.itemTwo.desc" />
+                      <label for="itemTwoDesc" class="form-field__label">Item Two Tile</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="itemThreeTitle" type="text" class="form-field__input" placeholder=" " #itemThreeTitle
+                        formControlName="itemThreeTitle" [(ngModel)]="sectionThree.itemThree.title" />
+                      <label for="itemThreeTitle" class="form-field__label">Item Three Tile</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="itemThreeDesc" type="text" class="form-field__input" placeholder=" " #itemThreeDesc
+                        formControlName="itemThreeDesc" [(ngModel)]="sectionThree.itemThree.desc" />
+                      <label for="itemThreeDesc" class="form-field__label">Item Three Tile</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
 
                 </form>
@@ -389,13 +658,9 @@
 
             <div class="card card-blog card-plain">
               <div class="card-body p-3">
-                <a>
-                  <h5 [innerHtml]="sectionFour.title"></h5>
-                </a>
-                <p class="mb-4 text-sm">{{ sectionFour.desc }}</p>
-                <div class="d-flex align-items-center justify-content-between">
-                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionFour.btnText }}</button>
-                </div>
+                <h5>
+                  {{ sectionFour.title }} <span>{{ sectionFour.titleSpan }}</span>
+                </h5>
               </div>
             </div>
 
@@ -406,7 +671,8 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionFour = true">Click to Edit Content</h6>
+            <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionFour = true">Edit
+              Content</button>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -414,22 +680,25 @@
               <div class="body">
 
                 <form (ngSubmit)="onSectionFourSubmit()" [formGroup]="sectionFourForm" *ngIf="sectionFour">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
-                      [(ngModel)]="sectionFour.title">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="sectionFour.title" />
+                      <label for="title" class="form-field__label">Hero Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnText formControlName="btnText" required
-                      placeholder="Button Text" [(ngModel)]="sectionFour.btnText">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="titleSpan" type="text" class="form-field__input" placeholder=" " #titleSpan
+                        formControlName="titleSpan" [(ngModel)]="sectionFour.titleSpan" />
+                      <label for="titleSpan" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnLink formControlName="btnLink" required
-                      placeholder="Button destination page" [(ngModel)]="sectionFour.btnLink">
-                  </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
-                      required [(ngModel)]="sectionFour.desc"></textarea>
-                  </div>
+
                 </form>
 
               </div>
@@ -473,10 +742,13 @@
             <div class="card card-blog card-plain">
               <div class="card-body p-3">
                 <a>
-                  <h5 [innerHtml]="sectionFive.title"></h5>
+                  <h5>
+                    {{ sectionFive.title }} <span>{{ sectionFive.titleSpan }}</span>
+                  </h5>
                 </a>
                 <p class="mb-4 text-sm">{{ sectionFive.subtitle }}</p>
                 <p class="mb-4 text-sm">{{ sectionFive.desc }}</p>
+                <p class="mb-4 text-sm">{{ sectionFive.para }}</p>
                 <div class="d-flex align-items-center justify-content-between">
                   <button type="button" class="btn btn-outline-primary btn-sm mb-0">{{sectionFive.btnText }}</button>
                 </div>
@@ -490,7 +762,8 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 clickable" (click)="canEditSectionFive = true">Click to Edit Content</h6>
+            <button type="button" class="btn btn-primary btn-sm" (click)="canEditSectionFive = true">Edit
+              Content</button>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -498,22 +771,61 @@
               <div class="body">
 
                 <form (ngSubmit)="onSectionFiveSubmit()" [formGroup]="sectionFiveForm" *ngIf="sectionFive">
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #title formControlName="title" required placeholder="Title"
-                      [(ngModel)]="sectionFive.title">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="title" type="text" class="form-field__input" placeholder=" " #title
+                        formControlName="title" [(ngModel)]="sectionFive.title" />
+                      <label for="title" class="form-field__label">Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #btnText formControlName="btnText" required
-                      placeholder="Button Text" [(ngModel)]="sectionFive.btnText">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="titleSpan" type="text" class="form-field__input" placeholder=" " #titleSpan
+                        formControlName="titleSpan" [(ngModel)]="sectionFive.titleSpan" />
+                      <label for="titleSpan" class="form-field__label">Highlighted Title</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-static my-3">
-                    <input type="text" class="form-control" #subtitle formControlName="subtitle" required
-                      [(ngModel)]="sectionFive.subtitle">
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="subtitle" class="form-field__textarea" placeholder=" " #subtitle
+                        formControlName="subtitle" [(ngModel)]="sectionFive.subtitle"></textarea>
+                      <label for="subtitle" class="form-field__label">Subtitle</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
-                  <div class="input-group input-group-dynamic">
-                    <textarea class="form-control" rows="5" placeholder="Description" #desc formControlName="desc"
-                      required [(ngModel)]="sectionFive.desc"></textarea>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="desc" class="form-field__textarea" placeholder=" " #desc formControlName="desc"
+                        [(ngModel)]="sectionFive.desc"></textarea>
+                      <label for="desc" class="form-field__label">Paragraph Two</label>
+                      <div class="form-field__bar"></div>
+                    </div>
                   </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <textarea id="para" class="form-field__textarea" placeholder=" " #para formControlName="para"
+                        [(ngModel)]="sectionFive.para"></textarea>
+                      <label for="para" class="form-field__label">Paragraph Two</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field__control">
+                      <input id="btnText" type="text" class="form-field__input" placeholder=" " #btnText
+                        formControlName="btnText" [(ngModel)]="sectionFive.btnText" />
+                      <label for="btnText" class="form-field__label">Button Text</label>
+                      <div class="form-field__bar"></div>
+                    </div>
+                  </div>
+
                 </form>
 
               </div>

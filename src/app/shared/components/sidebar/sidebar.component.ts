@@ -17,16 +17,17 @@ export class SidebarComponent implements OnInit {
       title: 'Learning Design',
       url: '/learning-design',
     },
+    { icon: 'ri-group-line', title: 'Board Members', url: '/bods' },
     { icon: 'ri-mic-2-line', title: 'Speaking', url: '/speaking' },
     { icon: 'ri-group-line', title: 'Registered Members', url: '/members' },
     { icon: 'ri-volume-up-line', title: 'Testimonials', url: '/testimonials' },
   ];
 
   mediaMenu = [
-    { icon: 'ri-mic-line', title: 'Podcasts', url: '/podcasts' },
-    { icon: 'ri-vidicon-2-line', title: 'Conferences', url: '/conference' },
-    { icon: 'ri-voiceprint-line', title: 'Articles', url: '/articles' },
-    { icon: 'ri-voiceprint-line', title: 'Webinars', url: '/webinars' },
+    { icon: 'ri-image-line', title: 'Gallery', url: '/gallery' },
+    // { icon: 'ri-vidicon-2-line', title: 'Conferences', url: '/conference' },
+    // { icon: 'ri-voiceprint-line', title: 'Articles', url: '/articles' },
+    // { icon: 'ri-voiceprint-line', title: 'Webinars', url: '/webinars' },
   ];
 
   accountMenu = [

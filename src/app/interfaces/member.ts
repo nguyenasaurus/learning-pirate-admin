@@ -1,6 +1,6 @@
 export interface Member {
   id?: string;
-  name?: string;
+  fullName?: string;
   message?: string;
   email?: string;
 }

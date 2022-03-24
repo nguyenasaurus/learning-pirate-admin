@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import {
+  LdProcesses,
   LearningNeedSectionOne,
   LearningNeedSectionTwo,
 } from 'src/app/interfaces/learning-need';
@@ -38,6 +39,17 @@ export class LearningDesignComponent implements OnInit {
   canEditSectionTwo = false;
   chosenItemTwo: any;
 
+  selectedBtnPage = '';
+  selectedBtnPageUrl = '';
+
+  btnPages = [
+    { title: 'Contact Me', url: '/contact-me' },
+    { title: 'Membership', url: '/membership' },
+  ];
+  processes: LdProcesses[] = [];
+  canAddProcess = false;
+  selectedProcess: LdProcesses = {};
+
   constructor(
     private formBuilder: FormBuilder,
     private titleService: Title,
@@ -63,7 +75,79 @@ export class LearningDesignComponent implements OnInit {
       .getById(this.sectionTwoId)
       .subscribe((res: LearningNeedSectionTwo) => {
         this.sectionTwo = res;
+        this.selectedBtnPageUrl = res.btnLink!;
       });
+
+    this.learningDesignsService
+      .getProcesses()
+      .subscribe((res: LdProcesses[]) => {
+        this.processes = res;
+      });
+  }
+
+  editProcess(item: any) {
+    this.canAddProcess = true;
+    this.selectedProcess = item;
+  }
+
+  formProcess = this.formBuilder.group({
+    title: [''],
+    desc: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'change',
+      },
+    ],
+    para: [''],
+    position: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'change',
+      },
+    ],
+  });
+
+  async onEditProcess() {
+    if (this.formProcess.invalid) {
+      this.toast.error(
+        'Please provide valid data. Remember all fields are required',
+        'Request Denied'
+      );
+      return;
+    } else {
+      this.isSubmitting = true;
+      this.formProcess.disable;
+
+      let title = this.formProcess.value.title;
+      let position = this.formProcess.value.position;
+      let desc = this.formProcess.value.desc;
+      let para = this.formProcess.value.para;
+
+      let data = {
+        title: title,
+        desc: desc,
+        para: para,
+        position: position,
+      };
+
+      this.learningDesignsService
+        .updateLearningDesign(this.selectedProcess.id!, data)
+        .then(() => {
+          this.toast.success(
+            'You have successfully updated learning design.',
+            'Request Successful'
+          );
+          this.isSubmitting = false;
+          this.formProcess.enable;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isSubmitting = false;
+          this.formProcess.enable;
+        });
+    }
   }
 
   // check level
@@ -99,6 +183,8 @@ export class LearningDesignComponent implements OnInit {
         updateOn: 'change',
       },
     ],
+    para1: [''],
+    para2: [''],
   });
 
   async onEditSubmit() {
@@ -115,10 +201,14 @@ export class LearningDesignComponent implements OnInit {
       let author = this.formOne.value.author;
       let jobTitle = this.formOne.value.jobTitle;
       let quote = this.formOne.value.quote;
+      let para1 = this.formOne.value.para1;
+      let para2 = this.formOne.value.para2;
 
       let data = {
         author: author,
         quote: quote,
+        para2: para2,
+        para1: para1,
         jobTitle: jobTitle,
       };
 
@@ -126,7 +216,7 @@ export class LearningDesignComponent implements OnInit {
         .update(this.sectionOneId, data)
         .then(() => {
           this.toast.success(
-            'You have successfully updated a home section.',
+            'You have successfully updated learning design.',
             'Request Successful'
           );
           this.isSubmitting = false;
@@ -145,8 +235,20 @@ export class LearningDesignComponent implements OnInit {
     this.chosenItem = item;
   }
 
+  setActiveItem(item: any) {
+    this.selectedBtnPage = item.url;
+    this.selectedBtnPageUrl = item.url;
+  }
+
   formTwo = this.formBuilder.group({
     title: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'change',
+      },
+    ],
+    titleSpan: [
       '',
       {
         validators: [Validators.required],
@@ -167,13 +269,6 @@ export class LearningDesignComponent implements OnInit {
         updateOn: 'change',
       },
     ],
-    btnLink: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
   });
 
   async onSectionTwoSubmit() {
@@ -188,12 +283,14 @@ export class LearningDesignComponent implements OnInit {
       this.formTwo.disable;
 
       let title = this.formTwo.value.title;
-      let btnLink = this.formTwo.value.btnLink;
+      let titleSpan = this.formTwo.value.titleSpan;
+      let btnLink = this.selectedBtnPageUrl;
       let btnText = this.formTwo.value.btnText;
       let desc = this.formTwo.value.desc;
 
       let data = {
         title: title,
+        titleSpan: titleSpan,
         btnLink: btnLink,
         btnText: btnText,
         desc: desc,

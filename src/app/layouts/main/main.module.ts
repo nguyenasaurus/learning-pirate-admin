@@ -19,6 +19,16 @@ import { HomeComponent } from './components/home/home.component';
 import { TestimonialComponent } from './components/testimonial/testimonial.component';
 import { WebinarsComponent } from './components/webinars/webinars.component';
 
+import {
+  CloudinaryConfiguration,
+  CloudinaryModule,
+} from '@cloudinary/angular-5.x';
+import * as Cloudinary from 'cloudinary-core';
+
+import { FileUploadModule } from 'ng2-file-upload';
+import { BoardOfDirectorComponent } from './components/board-of-director/board-of-director.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
+
 @NgModule({
   declarations: [
     MainComponent,
@@ -35,6 +45,8 @@ import { WebinarsComponent } from './components/webinars/webinars.component';
     HomeComponent,
     TestimonialComponent,
     WebinarsComponent,
+    BoardOfDirectorComponent,
+    GalleryComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +55,11 @@ import { WebinarsComponent } from './components/webinars/webinars.component';
     ReactiveFormsModule,
     SharedModule,
     DataTablesModule.forRoot(),
+    CloudinaryModule.forRoot(Cloudinary, {
+      cloud_name: 'theoakcapital',
+      upload_preset: 'tocadmin',
+    }),
+    FileUploadModule,
   ],
 })
 export class MainModule {}

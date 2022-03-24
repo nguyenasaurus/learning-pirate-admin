@@ -225,6 +225,54 @@ b {
   width: 100%;
 }
 
+.upload_button_holder {
+  margin-top: 30px;
+}
+
+.upload_button {
+  background: var(--background);
+  color: var(--primary);
+  border-radius: 50px;
+  padding: 0.7rem 2.5rem;
+  cursor: pointer;
+}
+
+.requestProgress {
+  margin: 30px 0px;
+  width: 100%;
+  height: 2px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    to right,
+    #007db6,
+    #0091b2,
+    #009c9e,
+    #00a77e,
+    #22b24c,
+    #60b031,
+    #a5b62e
+  );
+}
+
+.bar {
+  position: absolute;
+  width: calc(100% * 2 / 7);
+  height: 100%;
+  display: flex;
+  animation: move 2s linear infinite;
+  background-color: white;
+}
+
+@keyframes move {
+  0% {
+    transform: translate(-100%, 0);
+  }
+  100% {
+    transform: translate(calc(7 / 2 * 100%), 0);
+  }
+}
+
 /* ======= Authentication ======= */
 .split-screen {
   display: grid;
@@ -808,4 +856,109 @@ span {
     top: 0px;
     width: 100%;
   }
+}
+
+.selector {
+  background: var(--background);
+  padding: toRem(10);
+  border-radius: 6px;
+  align-items: center;
+  text-align: center;
+}
+.selector:hover {
+  cursor: pointer;
+  color: var(--primary);
+}
+.selector.active {
+  color: var(--primary);
+}
+
+/* Actual code example */
+$animation-duration: 0.4s;
+
+@mixin label-inactive() {
+  font-size: 16px;
+  transform: translateY(0);
+}
+
+@mixin label-active() {
+  font-size: 0.75rem;
+  transform: translateY(-14px);
+}
+
+.form-field {
+  display: block;
+  margin-bottom: 16px;
+  width: 100%;
+}
+.form-field__label {
+  @include label-active();
+  display: block;
+  font-weight: normal;
+  left: 0;
+  margin: 0;
+  padding: 18px 1px 0;
+  position: absolute;
+  top: 0;
+  transition: all $animation-duration;
+  width: 100%;
+}
+.form-field__control {
+  background: transparent;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.form-field__bar {
+  border-bottom: 2px solid var(--primary-color);
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  transform: scaleX(0);
+  transition: all $animation-duration;
+  width: 1%;
+}
+.form-field__input,
+.form-field__textarea {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #999;
+  color: #333;
+  display: block;
+  margin-top: 24px;
+  outline: 0;
+  padding: 0 12px 10px 1px;
+  width: 100%;
+
+  // IE 10-11
+  &:-ms-input-placeholder {
+    ~ .form-field__label {
+      @include label-inactive();
+    }
+  }
+  // All other browsers except Edge
+  &:placeholder-shown {
+    ~ .form-field__label {
+      @include label-inactive();
+    }
+  }
+  &:focus {
+    ~ .form-field__label {
+      color: var(--primary-color);
+      @include label-active();
+    }
+    ~ .form-field__bar {
+      border-bottom: 2px solid var(--primary-color);
+      transform: scaleX(150);
+    }
+  }
+}
+.form-field__textarea {
+  height: 150px;
 }

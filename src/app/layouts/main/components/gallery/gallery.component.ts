@@ -3,8 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
-import { Conference } from 'src/app/interfaces/conference';
-import { ConferenceService } from 'src/app/services/conference.service';
 import { UserService } from 'src/app/services/user.service';
 
 import {
@@ -13,20 +11,24 @@ import {
   ParsedResponseHeaders,
 } from 'ng2-file-upload';
 import { Cloudinary } from '@cloudinary/angular-5.x';
+import { Bod } from 'src/app/interfaces/bod';
+import { BodService } from 'src/app/services/bod.service';
+import { Gallery } from 'src/app/interfaces/about';
+import { AboutService } from 'src/app/services/about.service';
 
 @Component({
-  selector: 'app-conferences',
-  templateUrl: './conferences.component.html',
-  styleUrls: ['./conferences.component.scss'],
+  selector: 'app-gallery',
+  templateUrl: './gallery.component.html',
+  styleUrls: ['./gallery.component.scss'],
 })
-export class ConferencesComponent implements OnInit {
+export class GalleryComponent implements OnInit {
   pages = [
-    { url: '/conferences', title: 'Media' },
-    { url: '/conferences', title: 'Conferences' },
+    { url: '/gallery', title: 'Media' },
+    { url: '/gallery', title: 'Gallery' },
   ];
-  page = 'Conference';
+  page = 'Gallery';
 
-  conferences: Conference[] = [];
+  gallery: Gallery[] = [];
 
   selectedItem: any;
   chosenItem: any;
@@ -50,7 +52,7 @@ export class ConferencesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private titleService: Title,
     private toast: ToastrService,
-    private conferenceService: ConferenceService,
+    private galleryService: AboutService,
     private userService: UserService,
     private cloudinary: Cloudinary,
     private zone: NgZone
@@ -64,8 +66,8 @@ export class ConferencesComponent implements OnInit {
 
     this.checkLevel();
 
-    this.conferenceService.getConferences().subscribe((res: Conference[]) => {
-      this.conferences = res;
+    this.galleryService.getGallery().subscribe((res: Gallery[]) => {
+      this.gallery = res;
       this.dtTrigger.next(void 0);
     });
 
@@ -173,127 +175,29 @@ export class ConferencesComponent implements OnInit {
     });
   }
 
-  form = this.formBuilder.group({
-    title: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    description: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    publishedOn: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-    url: [
-      '',
-      {
-        validators: [Validators.required],
-        updateOn: 'change',
-      },
-    ],
-  });
-
   async onSubmit() {
-    if (this.form.invalid) {
-      this.toast.error(
-        'Please provide valid data. Remember all fields are required',
-        'Request Denied'
-      );
-      return;
-    } else {
-      this.isSubmitting = true;
-      this.form.disable;
+    this.isSubmitting = true;
 
-      let title = this.form.value.title;
-      let description = this.form.value.description;
-      let imageUrl = this.uploadedUrl;
-      let publishedOn = this.form.value.publishedOn;
-      let url = this.form.value.url;
+    let imageUrl = this.uploadedUrl;
 
-      let data = {
-        title: title,
-        description: description,
-        imageUrl: imageUrl,
-        publishedOn: publishedOn,
-        url: url,
-      };
+    let data = {
+      imageUrl: imageUrl,
+    };
 
-      this.conferenceService
-        .create(data)
-        .then(() => {
-          this.toast.success(
-            'You have successfully added a new conference.',
-            'Request Successful'
-          );
-          this.isSubmitting = false;
-          this.form.enable;
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isSubmitting = false;
-          this.form.enable;
-        });
-    }
-  }
-
-  async onEditSubmit() {
-    if (this.form.invalid) {
-      this.toast.error(
-        'Please provide valid data. Remember all fields are required',
-        'Request Denied'
-      );
-      return;
-    } else {
-      this.isSubmitting = true;
-      this.form.disable;
-
-      let title = this.form.value.title;
-      let description = this.form.value.description;
-      let imageUrl = this.uploadedUrl;
-      let publishedOn = this.form.value.publishedOn;
-      let url = this.form.value.url;
-
-      let data = {
-        title: title,
-        description: description,
-        imageUrl: imageUrl,
-        publishedOn: publishedOn,
-        url: url,
-      };
-
-      this.conferenceService
-        .update(this.chosenItem.id, data)
-        .then(() => {
-          this.toast.success(
-            'You have successfully updated an item.',
-            'Request Successful'
-          );
-          this.isSubmitting = false;
-          this.form.enable;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isSubmitting = false;
-          this.form.enable;
-        });
-    }
-  }
-
-  editItem(item: any) {
-    this.canEdit = true;
-    this.chosenItem = item;
+    this.galleryService
+      .addGallery(data)
+      .then(() => {
+        this.toast.success(
+          'You have successfully added an image.',
+          'Request Successful'
+        );
+        this.isSubmitting = false;
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+        this.isSubmitting = false;
+      });
   }
 
   deleteItem(item: any) {
@@ -301,8 +205,8 @@ export class ConferencesComponent implements OnInit {
   }
 
   async onDelete(id: string) {
-    this.conferenceService.delete(id).then(() => {
-      this.toast.success('Item deletion successful', 'Request Successful');
+    this.galleryService.deleteGallery(id).then(() => {
+      this.toast.success('Image deletion successful', 'Request Successful');
       window.location.reload();
     });
   }

@@ -1,9 +1,13 @@
 export interface SpeakingSectionOne {
   id?: string;
   header?: string;
+  headerSpan?: string;
   title?: string;
+  titleSpan?: string;
   conference?: string;
   desc?: string;
+  desc2?: string;
+  desc3?: string;
   btnText?: string;
   btnLink?: string;
 }
@@ -11,11 +15,14 @@ export interface SpeakingSectionOne {
 export interface SpeakingSectionTwo {
   id?: string;
   header?: string;
+  headerSpan?: string;
   title?: string;
+  titleSpan?: string;
   par?: string;
   desc?: string;
   btnText?: string;
   btnLink?: string;
+  audienceBenefits?: any;
 }
 
 export interface SpeakingSectionThree {
@@ -26,6 +33,7 @@ export interface SpeakingSectionThree {
   desc?: string;
   btnText?: string;
   btnLink?: string;
+  audienceBenefits?: any;
 }
 
 export interface SpeakingSectionFour {
@@ -36,4 +44,5 @@ export interface SpeakingSectionFour {
   desc?: string;
   btnText?: string;
   btnLink?: string;
+  audienceBenefits?: any;
 }

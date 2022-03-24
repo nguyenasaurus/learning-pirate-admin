@@ -1,7 +1,7 @@
 <!-- Navbar -->
 <app-header [pages]="pages" [page]="page"></app-header>
 <!-- End Navbar -->
-<div class="container-fluid py-4" *ngIf="testimonials">
+<div class="container-fluid py-4" *ngIf="bods">
 
   <div class="card card-body mt-2">
     <div class="row">
@@ -11,12 +11,12 @@
           <div class="card-header pb-0 p-3">
             <div class="row">
               <div class="col-md-6 d-flex align-items-center">
-                <h6 class="mb-0">Page {{ page }}</h6>
+                <h6 class="mb-0">Page Board Members</h6>
               </div>
               <div class="col-md-6 text-end">
                 <div class="clickable">
-                  <i class="ri-group-line text-secondary text-lg"></i>
-                  <strong class="mx-3">{{ testimonials.length | number }}</strong> In Total
+                  <i class="ri-voiceprint-line text-secondary text-lg"></i>
+                  <strong class="mx-3">{{ bods.length | number }}</strong> In Total
                 </div>
               </div>
             </div>
@@ -27,30 +27,24 @@
               [dtTrigger]="dtTrigger">
               <thead>
                 <tr>
+                  <th>Title</th>
+                  <th>Description</th>
                   <th>Image</th>
-                  <th>Testifier</th>
-                  <th>Testimony</th>
                   <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of testimonials">
+                <tr *ngFor="let article of bods">
+                  <td>{{ article.title }}</td>
+                  <td>{{ article.description }}</td>
+                  <td><img [src]="article.imageUrl" alt=""></td>
                   <td>
-                    <div class="img-holder">
-                      <img [src]="item.imageUrl" alt="">
-                    </div>
-                  </td>
-                  <td>
-                    {{ item.name }}
-                    <br>{{ item.title }}
-                  </td>
-                  <td>{{ item.testimony }}</td>
-                  <td>
-                    <button class="btn btn-sm info-bg" (click)="editItem(item)">
+                    <button class="btn btn-sm info-bg" (click)="editItem(article)" data-bs-toggle="modal"
+                      data-bs-target="#editModal" *ngIf="isAdmin">
                       Edit
                     </button>
-                    <button class="btn btn-sm danger-bg" (click)="deleteItem(item)" data-bs-toggle="modal"
-                      data-bs-target="#deleteModal">
+                    <button class="btn btn-sm danger-bg" (click)="deleteItem(article)" data-bs-toggle="modal"
+                      data-bs-target="#deleteModal" *ngIf="isAdmin">
                       Delete
                     </button>
                   </td>
@@ -65,8 +59,8 @@
       <div class="col-12 col-xl-4">
         <div class="card card-plain h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0" *ngIf="!canEdit">Create Article</h6>
-            <h6 class="mb-0" *ngIf="canEdit">Edit Article</h6>
+            <h6 class="mb-0" *ngIf="!canEdit">Create Board Member</h6>
+            <h6 class="mb-0" *ngIf="canEdit">Edit Board Member</h6>
           </div>
           <div class="card-body p-3" *ngIf="isAdmin">
 
@@ -77,27 +71,18 @@
 
                   <div class="form-field">
                     <div class="form-field__control">
-                      <input id="name" type="text" class="form-field__input" placeholder=" " #name
-                        formControlName="name" />
-                      <label for="name" class="form-field__label">Full Name</label>
-                      <div class="form-field__bar"></div>
-                    </div>
-                  </div>
-
-                  <div class="form-field">
-                    <div class="form-field__control">
                       <input id="title" type="text" class="form-field__input" placeholder=" " #title
                         formControlName="title" />
-                      <label for="title" class="form-field__label">Job Title</label>
+                      <label for="title" class="form-field__label">Name</label>
                       <div class="form-field__bar"></div>
                     </div>
                   </div>
 
                   <div class="form-field">
                     <div class="form-field__control">
-                      <textarea id="testimony" class="form-field__textarea" placeholder=" " #testimony
-                        formControlName="testimony"></textarea>
-                      <label for="testimony" class="form-field__label">Testimony</label>
+                      <input id="description" type="text" class="form-field__input" placeholder=" " #description
+                        formControlName="description" />
+                      <label for="description" class="form-field__label">Title</label>
                       <div class="form-field__bar"></div>
                     </div>
                   </div>
@@ -154,7 +139,7 @@
                     <span *ngIf="isSubmitting">
                       <i class="ri-loader-2-line"></i> Processing
                     </span>
-                    <span *ngIf="!isSubmitting">Save Testimony</span>
+                    <span *ngIf="!isSubmitting">Save</span>
                   </button>
 
                 </div>
@@ -168,31 +153,21 @@
 
                   <div class="form-field">
                     <div class="form-field__control">
-                      <input id="name" type="text" class="form-field__input" placeholder=" " #name
-                        formControlName="name" [(ngModel)]="chosenItem.name" />
-                      <label for="name" class="form-field__label">Full Name</label>
-                      <div class="form-field__bar"></div>
-                    </div>
-                  </div>
-
-                  <div class="form-field">
-                    <div class="form-field__control">
                       <input id="title" type="text" class="form-field__input" placeholder=" " #title
                         formControlName="title" [(ngModel)]="chosenItem.title" />
-                      <label for="title" class="form-field__label">Job Title</label>
+                      <label for="title" class="form-field__label">Name</label>
                       <div class="form-field__bar"></div>
                     </div>
                   </div>
 
                   <div class="form-field">
                     <div class="form-field__control">
-                      <textarea id="testimony" class="form-field__textarea" placeholder=" " #testimony
-                        formControlName="testimony" [(ngModel)]="chosenItem.testimony"></textarea>
-                      <label for="testimony" class="form-field__label">Testimony</label>
+                      <input id="description" type="text" class="form-field__input" placeholder=" " #description
+                        formControlName="description" [(ngModel)]="chosenItem.description" />
+                      <label for="title" class="form-field__label">Title</label>
                       <div class="form-field__bar"></div>
                     </div>
                   </div>
-
 
                   <div id="direct_upload" ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)"
                     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
@@ -235,7 +210,6 @@
                       </div>
                     </div>
                   </div>
-
                 </form>
 
               </div>
@@ -264,13 +238,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content" *ngIf="selectedItem">
             <div class="modal-header">
-              <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Delete Item</h5>
+              <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Delete Member</h5>
               <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              Are you sure you want to delete {{ selectedItem.name }}' testimony?
+              Are you sure you want to delete {{ selectedItem.title }}?
             </div>
             <div class="modal-footer">
               <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">No</button>
